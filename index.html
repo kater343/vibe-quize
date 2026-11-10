@@ -400,7 +400,7 @@ S.groupObjs = []; S.settings = null;
 const groupIdOf = name => S.groupObjs.find(g=>g.name===name)?.id || null;
 const groupNameOf = id => S.groupObjs.find(g=>g.id===id)?.name || '';
 function mkCode(prefix){ const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(const x of crypto.getRandomValues(new Uint32Array(4))) s+=a[x%a.length];
-  const p = (prefix||'').toUpperCase().normalize('NFD').replace(/[^A-Z0-9]+/g,'').slice(0,8); return (p?p+'-':'')+s; }
+  let p = (prefix||'').toUpperCase().normalize('NFD').replace(/[^A-Z0-9]+/g,'').slice(0,8); if(p && !/[A-Z]/.test(p)) p = 'G'+p; return (p?p+'-':'')+s; }
 function fromQuizRow(r){ return {title:r.title, subject:r.subject, topic:r.topic||'', description:r.description||'', questions:r.questions||[], authorId:r.author_id,
   targets:{all:r.target_all, groups:(r.target_groups||[]).map(groupNameOf).filter(Boolean), students:r.target_students||[]}, due:r.due||'', published:r.published, createdAt:r.created_at, updatedAt:r.updated_at}; }
 function fromAttRow(r){ return {answers:r.answers, flags:r.flags, correct:r.correct, total:r.total, score:r.score, tries:r.tries, best:r.best, first:r.first, history:r.history||[], subject:r.subject, topic:r.topic, finishedAt:r.finished_at, startedAt:r.started_at}; }
@@ -539,7 +539,9 @@ function studentStats(uid){
 
 /* ===================== Render ===================== */
 const $app = document.getElementById('app');
-let renderQueued = false;
+let renderQueued = false; let pointerIsDown = false;
+document.addEventListener('pointerdown', ()=>{ pointerIsDown = true; }, true);
+document.addEventListener('pointerup', ()=>{ pointerIsDown = false; setTimeout(()=>{ if(renderQueued && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){ renderQueued=false; softRender(); } }, 400); }, true);
 function render(){
   if(S.mode==='loading') return;
   const sy = window.scrollY;
@@ -552,7 +554,7 @@ function softRender(){ // from snapshots: avoid clobbering forms
   if(document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) { renderQueued = true; return; }
   S._keepScroll = true; render();
 }
-document.addEventListener('focusout', () => setTimeout(()=>{ if(renderQueued && !(document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))){ renderQueued=false; softRender(); } }, 50));
+document.addEventListener('focusout', () => setTimeout(()=>{ if(pointerIsDown) return; if(renderQueued && !(document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))){ renderQueued=false; softRender(); } }, 400));
 
 function toast(msg, err=false){ const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast'+(err?' err':''); clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.add('hidden'), 3200); }
 function writeErr(e){ console.warn(e); const c = e?.code; if(c==='42501'||/row-level security|not allowed/i.test(e?.message||'')){ toast('Нет прав на это действие.', true); return; }
@@ -667,7 +669,7 @@ function manageView(){
       ${codeRow('🧑‍🏫 Код преподавателя', S.settings?.teacher_code, `<button class="iconbtn" data-a="regenTeacher" title="Новый код">↻</button>`)}
       ${S.groupObjs.map(g=>codeRow(`🎒 Группа ${esc(g.name)} <span class="muted small">· ${students().filter(u=>groupOf(u)===g.name).length} уч.</span>`, g.code,
         `<button class="iconbtn" data-a="regenGroup" data-v="${esc(g.name)}" title="Новый код">↻</button><button class="iconbtn" data-a="delGroup" data-v="${esc(g.name)}" title="Удалить группу">✕</button>`)).join('')}
-      <div class="row" style="margin-top:14px"><input class="input" id="newgroup" placeholder="Новая группа, напр.: MSA-A" style="max-width:280px" maxlength="30"><button class="btn sm" data-a="addGroup">＋ Добавить группу</button></div>
+      <div class="row" style="margin-top:14px"><input class="input" id="newgroup" data-ng="1" value="${esc(S.newGroup||'')}" placeholder="Новая группа, напр.: MSA-B" style="max-width:280px" maxlength="30"><button class="btn sm" data-a="addGroup">＋ Добавить группу</button></div>
     </div>
     <div class="section-title"><h2>Все пользователи</h2><span class="count">${people.length}</span></div>
     <div class="tablewrap"><table><thead><tr><th>Имя</th><th>E-mail</th><th>Роль</th><th>Группа</th><th>С нами</th><th></th></tr></thead><tbody>
@@ -1021,8 +1023,8 @@ const A = {
   delQuiz: async () => { const E=S.editor; if(!E.confirmDel){ E.confirmDel=true; toast('Нажмите «Удалить квиз» ещё раз для подтверждения.'); return; }
     try{ await api.delQuiz(E.id); toast('Квиз удалён'); S.editor=null; S.sub=null; S.prevSub=null; render(); }catch(e){ writeErr(e); } },
   setRole: async el => { const uid = el.dataset.uid; try{ await api.setRole(uid, el.dataset.v); toast('Готово'); render(); }catch(e){ writeErr(e); } },
-  addGroup: async () => { const inp = document.getElementById('newgroup'); const v = (inp.value||'').trim(); if(!v) return; if(groups().includes(v)){ toast('Такая группа уже есть'); return; }
-    try{ await api.addGroup(v); toast('Группа создана - код ниже'); render(); }catch(e){ writeErr(e); } },
+  addGroup: async () => { const inp = document.getElementById('newgroup'); const v = ((inp && inp.value) || S.newGroup || '').trim(); if(!v){ toast('Введите название группы', true); inp?.focus(); return; } if(groups().includes(v)){ toast('Такая группа уже есть'); return; }
+    try{ await api.addGroup(v); S.newGroup=''; toast('Группа «'+v+'» создана - код ниже'); render(); }catch(e){ writeErr(e); } },
   delGroup: async el => { const v = el.dataset.v; if(S._confirmDel!==v){ S._confirmDel=v; toast('Нажмите ✕ ещё раз, чтобы удалить группу «'+v+'»'); return; } S._confirmDel=null; try{ await api.delGroup(v); render(); }catch(e){ writeErr(e); } },
 };
 
@@ -1106,6 +1108,7 @@ async function authSubmit(mode){
 }
 document.addEventListener('input', e => {
   const t = e.target, d = t.dataset;
+  if(d.ng){ S.newGroup = t.value; return; }
   if(d.af){ S.authForm[d.af] = t.value; if(d.af==='code') S.codeStatus=null; return; }
   const E = S.editor; if(!E) return;
   if(d.ed){ E[d.ed] = t.value; E.dirty=true; }
@@ -1120,6 +1123,7 @@ document.addEventListener('change', async e => {
   if(d.group!=null && d.group!==''){ try{ await api.setGroup(d.group, t.value); toast('Группа обновлена'); }catch(err){ writeErr(err); } t.blur(); render(); }
 });
 document.addEventListener('keydown', e => {
+  if(e.key==='Enter' && e.target?.dataset?.ng){ e.preventDefault(); A.addGroup(); return; }
   if(S.sub?.name!=='play' || !S.play || S.play.finished) return;
   if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
   const P = S.play; const k = e.key.toUpperCase();
