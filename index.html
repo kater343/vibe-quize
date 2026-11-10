@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vibe Abschluss Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;700;800&family=Rubik:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#0e402b; --forest-2:#16553a; --green:#298b5f; --green-soft:#dcefe3;
+  --cream:#f5fada; --paper:#f3ede1; --paper-2:#faf6ee; --sand:#ebd893; --gold:#ddb049; --gold-2:#eaaf28;
+  --ink:#00170d; --ink-2:#2c3d34; --muted:#66756c; --line:#e3dac6; --white:#fffdf8;
+  --math:#8e3b3b; --math-t:#f6e6e3; --en:#f07a2a; --en-t:#fdebdc; --de:#2f5fc4; --de-t:#e3eaf9;
+  --good:#298b5f; --warn:#c88a12; --bad:#d6452f;
+  --r:16px; --shadow:0 1px 0 rgba(14,64,43,.06), 0 6px 18px -10px rgba(14,64,43,.25);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Nunito,system-ui,sans-serif;background:var(--paper);color:var(--ink);font-size:16px;line-height:1.45;
+  background-image:radial-gradient(circle at 12% 8%,rgba(221,176,73,.10),transparent 40%),radial-gradient(circle at 90% 60%,rgba(41,139,95,.08),transparent 45%);min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:Rubik,Nunito,sans-serif;margin:0;line-height:1.2;letter-spacing:-.01em}
+h1{font-size:clamp(24px,4vw,32px);font-weight:800}
+h2{font-size:20px;font-weight:700}
+h3{font-size:17px;font-weight:700}
+.brandfont{font-family:"Bagel Fat One",Rubik,sans-serif;font-weight:400;letter-spacing:.02em}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 80px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.spacer{flex:1}
+.hidden{display:none!important}
+
+/* Top bar */
+.demo{background:var(--gold);color:var(--ink);font-size:14px;padding:8px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
+.demo b{font-weight:800}
+.demo button{border:2px solid var(--ink);background:transparent;border-radius:999px;padding:3px 12px;font-weight:700;font-size:13px}
+.demo button.on{background:var(--ink);color:var(--cream)}
+.top{background:var(--forest);color:var(--cream);position:sticky;top:0;z-index:20}
+.top-in{max-width:1080px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--cream)}
+.logo .wm{font-family:"Bagel Fat One",sans-serif;font-size:20px;line-height:.9;letter-spacing:.02em}
+.logo .wm span{display:block;color:var(--green);color:#5fc493}
+.logo .tag{background:var(--gold);color:var(--forest);font-family:"Bagel Fat One",sans-serif;font-size:13px;padding:3px 8px 2px;border-radius:8px;transform:rotate(-4deg)}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;color:rgba(245,250,218,.75);padding:8px 14px;border-radius:999px;font-weight:700;white-space:nowrap;font-size:15px}
+.tab:hover{color:var(--cream);background:rgba(255,255,255,.06)}
+.tab.on{background:var(--cream);color:var(--forest)}
+.me{display:flex;align-items:center;gap:8px;font-size:14px;white-space:nowrap}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--cream);display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
+.rolebadge{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:999px;background:rgba(245,250,218,.14)}
+@media (max-width:760px){
+  .top-in{flex-wrap:wrap;gap:8px}
+  .tabs{order:3;width:100%}
+  .me .nm{display:none}
+}
+
+/* Cards & UI */
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:800;background:var(--green);color:var(--cream);display:inline-flex;align-items:center;gap:8px;transition:transform .08s,filter .15s;text-decoration:none}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:translateY(1px)}
+.btn.dark{background:var(--forest)}
+.btn.gold{background:var(--gold);color:var(--forest)}
+.btn.ghost{background:transparent;color:var(--forest);border:2px solid var(--line)}
+.btn.ghost:hover{border-color:var(--green)}
+.btn.danger{background:transparent;color:var(--bad);border:2px solid #f0c9c1}
+.btn.sm{padding:7px 12px;font-size:14px;border-radius:10px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.chip{border:2px solid var(--line);background:var(--white);border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:7px}
+.chip .dot{width:10px;height:10px;border-radius:50%}
+.chip.on{background:var(--forest);border-color:var(--forest);color:var(--cream)}
+.chip.s-math.on{background:var(--math);border-color:var(--math)}
+.chip.s-en.on{background:var(--en);border-color:var(--en);color:var(--ink)}
+.chip.s-de.on{background:var(--de);border-color:var(--de)}
+.pill{font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;background:var(--paper);color:var(--ink-2);white-space:nowrap}
+.pill.new{background:var(--gold);color:var(--forest)}
+.pill.done{background:var(--green-soft);color:var(--forest)}
+.pill.late{background:#fbe0da;color:#9b2c1c}
+.pill.draft{background:#e9e4d6;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-weight:800;font-size:14px;color:var(--ink-2)}
+.input,select.input,textarea.input{border:2px solid var(--line);background:var(--paper-2);border-radius:12px;padding:10px 12px;width:100%;outline:none}
+.input:focus{border-color:var(--green);background:#fff}
+textarea.input{min-height:70px;resize:vertical}
+.section-title{display:flex;align-items:baseline;gap:10px;margin:28px 0 12px}
+.section-title .count{color:var(--muted);font-weight:700}
+.empty{text-align:center;padding:36px 16px;color:var(--muted)}
+.empty svg{margin-bottom:8px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:12px 18px;border-radius:12px;font-weight:700;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:92vw}
+.toast.err{background:#7d2416}
+.back{background:none;border:0;color:var(--forest);font-weight:800;padding:6px 0;margin-bottom:10px;display:inline-flex;gap:6px}
+
+/* Subject quiz cards */
+.qcard{text-align:left;border:0;padding:0;background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border:1px solid var(--line);transition:transform .12s, box-shadow .12s}
+.qcard:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(14,64,43,.06),0 14px 26px -14px rgba(14,64,43,.4)}
+.qband{padding:12px 16px 10px;color:var(--cream);display:flex;align-items:center;gap:8px;position:relative;overflow:hidden}
+.qband .subj{font-family:"Bagel Fat One",sans-serif;font-size:19px;letter-spacing:.03em}
+.qband .blob{position:absolute;right:-14px;top:-16px;width:74px;height:74px;opacity:.22}
+.s-math .qband{background:var(--math)}
+.s-en .qband{background:var(--en);color:var(--ink)}
+.s-de .qband{background:var(--de)}
+.qbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.qbody h3{font-size:17px}
+.qfoot{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:10px;font-size:14px;color:var(--muted)}
+.score{font-weight:800}
+.sc-good{color:var(--good)} .sc-warn{color:var(--warn)} .sc-bad{color:var(--bad)}
+
+/* Hello */
+.hello{display:flex;align-items:center;gap:18px;background:var(--forest);color:var(--cream);border-radius:22px;padding:18px 22px;position:relative;overflow:hidden}
+.hello h1{color:var(--cream)}
+.hello .sub{color:rgba(245,250,218,.8);margin-top:4px}
+.hello .stats{display:flex;gap:22px;margin-top:12px;flex-wrap:wrap}
+.hello .stat b{font-family:Rubik;font-size:22px;display:block;color:var(--gold)}
+.hello .stat span{font-size:13px;color:rgba(245,250,218,.75)}
+.hello .masc{flex:none;width:110px}
+@media (max-width:560px){.hello .masc{width:76px}}
+
+/* Play */
+.play{max-width:720px;margin:0 auto}
+.play-head{border-radius:20px 20px 0 0;padding:16px 20px;color:var(--cream);display:flex;align-items:center;gap:12px}
+.play-head.s-en{color:var(--ink)}
+.play-head .subj{font-family:"Bagel Fat One",sans-serif;font-size:20px}
+.s-math.play-head{background:var(--math)} .s-en.play-head{background:var(--en)} .s-de.play-head{background:var(--de)}
+.play-body{background:var(--white);border:1px solid var(--line);border-top:0;border-radius:0 0 20px 20px;padding:22px;box-shadow:var(--shadow)}
+.progress{height:8px;background:var(--paper);border-radius:99px;overflow:hidden;margin-bottom:18px}
+.progress i{display:block;height:100%;background:var(--gold);border-radius:99px;transition:width .3s}
+.qtext{font-size:20px;font-weight:800;font-family:Rubik;margin:4px 0 18px;line-height:1.35;white-space:pre-wrap}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;border:2px solid var(--line);background:var(--paper-2);border-radius:14px;padding:12px 14px;font-weight:700;font-size:16px;transition:border-color .12s,background .12s}
+.opt:hover:not([disabled]){border-color:var(--green);background:#fff}
+.opt .let{width:30px;height:30px;border-radius:9px;background:var(--white);border:2px solid var(--line);display:grid;place-items:center;font-weight:800;flex:none}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--good);background:var(--green-soft)}
+.opt.right .let{background:var(--good);border-color:var(--good);color:#fff}
+.opt.wrong{border-color:var(--bad);background:#fde7e2}
+.opt.wrong .let{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt.dim{opacity:.55}
+.explain{margin-top:16px;border-radius:14px;padding:14px 16px;border-left:6px solid var(--good);background:var(--green-soft)}
+.explain.bad{border-left-color:var(--bad);background:#fdeee9}
+.explain .verdict{font-weight:800;font-family:Rubik;font-size:17px;margin-bottom:4px}
+.explain p{margin:0;white-space:pre-wrap}
+.play-nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+.result-hero{text-align:center;padding:10px 0 4px}
+.result-hero .big{font-family:Rubik;font-weight:800;font-size:56px;line-height:1}
+.review{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+.review details{border:1px solid var(--line);border-radius:12px;background:var(--paper-2);padding:10px 14px}
+.review summary{cursor:pointer;font-weight:700;display:flex;gap:10px;align-items:flex-start;list-style:none}
+.review summary::-webkit-details-marker{display:none}
+.review .mk{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800;margin-top:1px}
+.mk.ok{background:var(--good)} .mk.no{background:var(--bad)}
+.review .ans{margin:8px 0 0 32px;font-size:15px}
+
+/* Progress */
+.subjects3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:640px){.subjects3{grid-template-columns:1fr}}
+.subjcard{border-radius:var(--r);padding:16px;color:var(--cream);position:relative;overflow:hidden;min-height:118px}
+.subjcard.s-en{color:var(--ink)}
+.subjcard.s-math{background:var(--math)} .subjcard.s-en{background:var(--en)} .subjcard.s-de{background:var(--de)}
+.subjcard .subj{font-family:"Bagel Fat One",sans-serif;font-size:18px}
+.subjcard .pct{font-family:Rubik;font-weight:800;font-size:36px;line-height:1.1;margin-top:6px}
+.subjcard .meta{font-size:13px;opacity:.85}
+.subjcard .blob{position:absolute;right:-18px;bottom:-22px;width:100px;opacity:.2}
+.topics{display:flex;flex-direction:column;gap:12px}
+.topic{display:grid;grid-template-columns:minmax(120px,240px) 1fr 108px;gap:12px;align-items:center}
+@media (max-width:560px){.topic{grid-template-columns:1fr 92px}.topic .bar{grid-column:1/-1;order:3}}
+.topic .tn{font-weight:700;display:flex;gap:8px;align-items:center;min-width:0}
+.topic .tn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sdot{width:10px;height:10px;border-radius:3px;flex:none}
+.bar{height:12px;background:var(--paper);border-radius:99px;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;border-radius:4px 99px 99px 4px}
+.lvl{font-size:13px;font-weight:800;display:flex;gap:6px;align-items:center;justify-content:flex-end;white-space:nowrap}
+.weak{display:flex;flex-direction:column;gap:10px}
+.weak .w{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:#fdf1ee;border:1px solid #f4d2ca}
+.weak .w b{font-family:Rubik}
+
+/* Tables */
+.tablewrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--line);background:var(--white);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--paper-2);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid #efe8d8;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tr.click{cursor:pointer}
+tr.click:hover td{background:#faf5ea}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cellscore{display:inline-flex;align-items:center;gap:6px;font-weight:800}
+.minibar{width:46px;height:6px;background:var(--paper);border-radius:9px;overflow:hidden;display:inline-block}
+.minibar i{display:block;height:100%}
+
+/* Teacher list */
+.qrow{display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);margin-bottom:10px;border-left:8px solid var(--line)}
+.qrow.s-math{border-left-color:var(--math)} .qrow.s-en{border-left-color:var(--en)} .qrow.s-de{border-left-color:var(--de)}
+.qrow .info{flex:1;min-width:0}
+.qrow .info h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.qrow .kpis{display:flex;gap:18px;text-align:center}
+.qrow .kpis b{display:block;font-family:Rubik;font-size:18px}
+.qrow .kpis span{font-size:12px;color:var(--muted);font-weight:700}
+.qrow .acts{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:760px){.qrow{flex-wrap:wrap}.qrow .kpis{width:100%;justify-content:flex-start}}
+.subjtag{font-family:"Bagel Fat One",sans-serif;font-size:13px;padding:2px 8px 1px;border-radius:7px;color:#fff;letter-spacing:.03em}
+.subjtag.s-math{background:var(--math)} .subjtag.s-en{background:var(--en);color:var(--ink)} .subjtag.s-de{background:var(--de)}
+
+/* Editor */
+.editor{max-width:820px;margin:0 auto}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg button{border:2px solid var(--line);background:var(--white);border-radius:12px;padding:9px 14px;font-weight:800;display:flex;gap:8px;align-items:center}
+.seg button.on.s-math{background:var(--math);border-color:var(--math);color:#fff}
+.seg button.on.s-en{background:var(--en);border-color:var(--en)}
+.seg button.on.s-de{background:var(--de);border-color:var(--de);color:#fff}
+.seg button.on.plain{background:var(--forest);border-color:var(--forest);color:var(--cream)}
+.qedit{border:1px solid var(--line);border-radius:var(--r);background:var(--white);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.qedit .qh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.qedit .qnum{font-family:Rubik;font-weight:800;background:var(--forest);color:var(--cream);border-radius:9px;padding:2px 10px}
+.iconbtn{border:0;background:var(--paper);border-radius:9px;width:34px;height:34px;display:grid;place-items:center;font-weight:800}
+.iconbtn:hover{background:#ebe2cf}
+.optedit{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.optedit input[type=radio]{width:22px;height:22px;accent-color:var(--green);flex:none}
+.optedit .input{padding:8px 10px}
+.optedit.isright .input{border-color:var(--good);background:#f0f9f3}
+.hint{font-size:13px;color:var(--muted)}
+.sticky-actions{position:sticky;bottom:0;background:linear-gradient(transparent,var(--paper) 30%);padding:18px 0 10px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.errbox{background:#fdeee9;border:1px solid #f4d2ca;color:#7d2416;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-weight:700}
+
+/* Admin */
+.kpis6{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+.kpi .v{font-family:Rubik;font-weight:800;font-size:30px;line-height:1.1;color:var(--forest)}
+.kpi .l{font-size:13px;color:var(--muted);font-weight:700}
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+.days{display:flex;align-items:flex-end;gap:4px;height:150px;padding-top:10px}
+.days .d{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;position:relative}
+.days .d i{width:100%;max-width:26px;background:var(--green);border-radius:4px 4px 0 0;min-height:2px}
+.days .d:hover i{background:var(--forest)}
+.days .d span{font-size:10px;color:var(--muted);font-weight:700}
+.days .d .tip{position:absolute;bottom:calc(100% - 6px);background:var(--ink);color:var(--cream);font-size:12px;padding:4px 8px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .1s}
+.days .d:hover .tip{opacity:1}
+.feed{display:flex;flex-direction:column}
+.feed .ev{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #efe8d8;align-items:flex-start}
+.feed .ev:last-child{border-bottom:0}
+.feed .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;font-size:16px;background:var(--paper)}
+.feed .t{font-size:13px;color:var(--muted)}
+.req{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #efe8d8;flex-wrap:wrap}
+.gchip{display:inline-flex;align-items:center;gap:6px;background:var(--paper);border-radius:999px;padding:5px 6px 5px 12px;font-weight:800}
+.gchip button{border:0;background:#e6dcc6;border-radius:50%;width:22px;height:22px;line-height:1;font-weight:800}
+.note{background:#fff8e2;border:1px solid #f0dfa6;border-radius:14px;padding:14px 16px;font-size:15px}
+.note ol{margin:6px 0 0;padding-left:20px}
+
+/* Onboarding */
+.onb{max-width:520px;margin:40px auto;text-align:center}
+.onb .card{text-align:left;margin-top:18px}
+.rolepick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rolepick button{border:2px solid var(--line);background:var(--paper-2);border-radius:14px;padding:14px;font-weight:800;text-align:left}
+.rolepick button small{display:block;font-weight:600;color:var(--muted);font-size:13px}
+.rolepick button.on{border-color:var(--green);background:var(--green-soft)}
+.loading{display:grid;place-items:center;min-height:70vh;text-align:center;color:var(--muted)}
+.bob{animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.wide{width:100%;justify-content:center}
+.linkbtn{background:none;border:0;color:var(--forest);padding:4px 0;font-size:14px}
+.linkbtn:hover{text-decoration:underline}
+.authlinks{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px}
+.mono,.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em}
+.code{background:var(--paper);border:1px dashed #d6c9ab;border-radius:9px;padding:6px 10px;font-weight:700;font-size:15px}
+.coderow{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #efe8d8;flex-wrap:wrap}
+.aibox{background:linear-gradient(135deg,#fff8e2,#f3f8ec);border:2px solid #ead79d;border-radius:var(--r);padding:16px;margin:22px 0 4px}
+.aistar{width:38px;height:38px;border-radius:12px;background:var(--gold);display:grid;place-items:center;font-size:20px;flex:none}
+.mini{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:800;color:var(--muted)}
+.mini .input{padding:7px 10px;min-width:120px}
+.spin{width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);font-weight:700}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading"><div><div id="bootmasc" class="bob"></div><p>Загружаем…</p></div></div></div>
+<div id="toast" class="toast hidden"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+
+<script>
+/* ===================== Constants ===================== */
+const SUBJ = {
+  math:{key:'math', de:'MATHEMATIK', ru:'Математика', color:'#8e3b3b'},
+  en:  {key:'en',   de:'ENGLISH',    ru:'Английский', color:'#f07a2a'},
+  de:  {key:'de',   de:'DEUTSCH',    ru:'Немецкий',   color:'#2f5fc4'},
+};
+const SUBJ_KEYS = ['math','en','de'];
+const BLOB = "M2.60177 18.4481C3.88183 19.9874 3.88442 24.0713 2.61155 25.6166C1.01124 27.5593 0.0527138 30.0447 0.0527138 32.7468C0.0527138 38.987 5.10751 44 11.2796 44C13.9957 44 16.4817 43.0448 18.4233 41.4491C19.9722 40.1762 24.0809 40.176 25.6298 41.4489C27.5714 43.0447 30.0575 44 32.7742 44C38.9463 44 44 38.987 44 32.7468C44 30.0246 43.0116 27.5224 41.3843 25.5734C40.1057 24.0421 40.1057 20.0103 41.3824 18.4774C43.0109 16.5221 44 14.0057 44 11.2532C44 5.06688 38.9463 0 32.7742 0C30.0809 0 27.6239 0.934257 25.6925 2.49796C24.1202 3.77091 19.8546 3.7566 18.2823 2.48375C16.3612 0.928597 13.911 0 11.2258 0C5.05365 0 0 5.06688 0 11.2532C0 13.9919 0.979272 16.497 2.60177 18.4481Z";
+const BODY = "M51.9 0C52 0.4 52 0.8 52 1.3C52 6.8 48.7 11.7 43.9 13.9C48.7 16.1 52 20.8 52 26.5C52 34.2 46 40 38 40H14C6 40 0 34.2 0 26.5C0 20.8 3.3 16.1 8.1 13.9C3.3 11.7 0 6.8 0 1.3C0 0.8 0 0.4 0 0H51.9Z";
+
+function blobSvg(color, cls='blob'){ return `<svg class="${cls}" viewBox="0 0 44 44" aria-hidden="true"><path d="${BLOB}" fill="${color}"/></svg>`; }
+function mascot(bg='#ddb049', w=110, mood='cool'){
+  const mouth = mood==='sad' ? `<path d="M42 50 q8 -6 16 0" stroke="#0e402b" stroke-width="3.2" fill="none" stroke-linecap="round"/>`
+             : mood==='happy' ? `<path d="M40 47 q10 9 20 0" stroke="#0e402b" stroke-width="3.2" fill="none" stroke-linecap="round"/>`
+             : `<path d="M41 49 l6 2 l12 2" stroke="#0e402b" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
+  return `<svg viewBox="0 0 100 112" width="${w}" aria-hidden="true">
+    <g transform="rotate(-15 50 58) translate(6 14) scale(2)"><path d="${BLOB}" fill="${bg}"/></g>
+    <g transform="translate(24 58)"><path d="${BODY}" fill="#298b5f"/></g>
+    <g transform="translate(76 58) rotate(180)"><path d="${BODY}" fill="#298b5f"/></g>
+    <g fill="#111">
+      <rect x="18" y="27" width="64" height="3.5"/>
+      <rect x="23" y="30" width="22" height="6"/><rect x="25" y="36" width="18" height="2.5"/><rect x="28" y="38.5" width="12" height="2"/>
+      <rect x="55" y="30" width="22" height="6"/><rect x="57" y="36" width="18" height="2.5"/><rect x="60" y="38.5" width="12" height="2"/>
+      <rect x="45" y="30" width="10" height="3"/>
+    </g>
+    <g fill="#fff"><rect x="26" y="31" width="3" height="2"/><rect x="58" y="31" width="3" height="2"/></g>
+    ${mouth}
+  </svg>`;
+}
+
+/* ===================== Sample content (demo + seed) ===================== */
+const SAMPLE_QUIZZES = [
+ {id:'sample-prozent', title:'Prozentrechnung: Grundlagen', subject:'math', topic:'Prozentrechnung',
+  description:'Grundwert, Prozentwert, Prozentsatz - как на MSA.',
+  questions:[
+   {q:'Ein Pullover kostet 40 €. Er wird um 25 % reduziert. Wie viel kostet er jetzt?', options:['30 €','15 €','35 €','10 €'], correct:0,
+    explanation:'25 % von 40 € = 0,25 · 40 = 10 € (Prozentwert).\nНовая цена: 40 € − 10 € = 30 €.\nБыстрый путь: 100 % − 25 % = 75 % → 0,75 · 40 = 30 €.'},
+   {q:'Wie viel sind 15 % von 200?', options:['15','30','20','300'], correct:1,
+    explanation:'Prozentwert W = G · p = 200 · 0,15 = 30.\nПроверка: 10 % от 200 = 20, ещё 5 % = 10, вместе 30.'},
+   {q:'12 sind 30 % von welcher Zahl?', options:['36','4','40','360'], correct:2,
+    explanation:'Ищем Grundwert: G = W : p = 12 : 0,3 = 40.\nПроверка: 30 % от 40 = 12 ✓'},
+   {q:'Ein Preis steigt von 80 € auf 100 €. Um wie viel Prozent ist er gestiegen?', options:['20 %','25 %','80 %','125 %'], correct:1,
+    explanation:'Разница 20 € делим на СТАРУЮ цену (Grundwert = 80 €): 20 : 80 = 0,25 = 25 %.\nЧастая ошибка: делить на 100 € и получить 20 %.'},
+  ]},
+ {id:'sample-gleichungen', title:'Lineare Gleichungen', subject:'math', topic:'Gleichungen',
+  description:'Решаем линейные уравнения шаг за шагом.',
+  questions:[
+   {q:'Löse: 3x + 5 = 20', options:['x = 5','x = 15','x = 25/3','x = 4'], correct:0,
+    explanation:'3x + 5 = 20 | − 5\n3x = 15 | : 3\nx = 5'},
+   {q:'Löse: 2(x − 1) = 10', options:['x = 4','x = 5,5','x = 6','x = 11'], correct:2,
+    explanation:'Сначала раскрываем скобки: 2x − 2 = 10 | + 2\n2x = 12 | : 2\nx = 6'},
+   {q:'Löse: 5x − 3 = 2x + 9', options:['x = 2','x = 4','x = 6','x = 12'], correct:1,
+    explanation:'Переносим x влево, числа вправо: 5x − 2x = 9 + 3\n3x = 12 → x = 4'},
+  ]},
+ {id:'sample-tenses', title:'Simple Past vs. Present Perfect', subject:'en', topic:'Tenses',
+  description:'Signal words: yesterday, ago, since, ever…',
+  questions:[
+   {q:'I ___ my homework yesterday.', options:['have done','did','do','done'], correct:1,
+    explanation:'"yesterday" - конкретное время в прошлом → Simple Past: did.\nPresent Perfect с yesterday не используется.'},
+   {q:'She ___ in Berlin since 2020.', options:['lives','lived','has lived','is living'], correct:2,
+    explanation:'"since 2020" - действие началось в прошлом и продолжается сейчас → Present Perfect: has lived.'},
+   {q:'___ you ever ___ to London?', options:['Did / go','Have / been','Were / been','Have / went'], correct:1,
+    explanation:'"ever" (когда-либо в жизни) → Present Perfect: Have you ever been…?\n"went" - это Simple Past, с have не сочетается.'},
+   {q:'We ___ that film two weeks ago.', options:['saw','have seen','see','seen'], correct:0,
+    explanation:'"ago" всегда требует Simple Past → saw.'},
+  ]},
+ {id:'sample-nebensatz', title:'Konjunktionen & Nebensätze', subject:'de', topic:'Nebensätze',
+  description:'weil, obwohl, dass, denn - где стоит глагол?',
+  questions:[
+   {q:'Ich bleibe heute zu Hause, weil ich krank ___.', options:['sein','ist','bin','bist'], correct:2,
+    explanation:'После "weil" начинается Nebensatz → спрягаемый глагол стоит в КОНЦЕ.\nПодлежащее "ich" → "bin".'},
+   {q:'Welcher Satz ist richtig?', options:['Ich weiß, dass er kommt morgen.','Ich weiß, dass er morgen kommt.','Ich weiß, dass kommt er morgen.','Ich weiß, er dass morgen kommt.'], correct:1,
+    explanation:'"dass" открывает Nebensatz → глагол "kommt" в самый конец: …, dass er morgen kommt.'},
+   {q:'___ es regnet, gehen wir spazieren.', options:['Weil','Denn','Obwohl','Deshalb'], correct:2,
+    explanation:'Здесь противоречие (дождь, но всё равно гуляем) → Konzessivsatz с "obwohl".\n"Denn" и "deshalb" не могут начинать такое предложение с глаголом в конце.'},
+   {q:'Er lernt viel, ___ er will die Prüfung bestehen.', options:['weil','denn','dass','obwohl'], correct:1,
+    explanation:'Обрати внимание: после пропуска глагол "will" стоит на 2-м месте (er WILL…).\nЭто Hauptsatz → нужен "denn". После "weil" было бы: …, weil er die Prüfung bestehen will.'},
+  ]},
+];
+
+/* ===================== Utils ===================== */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const clone = o => JSON.parse(JSON.stringify(o));
+const today = () => new Date().toISOString().slice(0,10);
+const fmtDate = iso => { if(!iso) return ''; const d = new Date(iso.length===10 ? iso+'T12:00:00' : iso); return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'}); };
+const fmtWhen = iso => { if(!iso) return ''; const d=new Date(iso), diff=(Date.now()-d)/1000;
+  if(diff<60) return 'только что'; if(diff<3600) return Math.floor(diff/60)+' мин назад'; if(diff<86400) return Math.floor(diff/3600)+' ч назад';
+  if(diff<86400*7) return Math.floor(diff/86400)+' дн назад'; return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit'}); };
+const scCls = p => p==null ? '' : p>=80 ? 'sc-good' : p>=60 ? 'sc-warn' : 'sc-bad';
+const scColor = p => p>=80 ? 'var(--good)' : p>=60 ? 'var(--warn)' : 'var(--bad)';
+const lvlLabel = p => p>=80 ? '✓ Отлично' : p>=60 ? '~ Нормально' : '! Подтянуть';
+const initials = n => (n||'?').trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+const plural = (n, a, b, c) => { const m=n%10, h=n%100; return (m===1&&h!==11)?a:(m>=2&&m<=4&&(h<10||h>=20))?b:c; };
+const avg = arr => arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : null;
+function deepMerge(t, s){ for(const k in s){ const v=s[k]; if(v && typeof v==='object' && !Array.isArray(v)){ if(!t[k]||typeof t[k]!=='object'||Array.isArray(t[k])) t[k]={}; deepMerge(t[k], v); } else t[k]=clone(v); } return t; }
+
+/* ===================== State ===================== */
+const S = {
+  mode:'loading', me:null, demoAs:null,
+  profiles:{}, roles:{}, quizzes:{}, attempts:{}, config:{groups:[]},
+  loaded:new Set(), slow:false, readOnly:false,
+  tab:null, sub:null, filter:'all', onlyMine:false, groupFilter:'all',
+  play:null, editor:null, authForm:{}, authMode:'login', isDemo:false,
+};
+let B = null; // backend
+
+/* ===================== Backends ===================== */
+const SB_URL = 'https://kxrszdwavzaktwwystbp.supabase.co';
+const SB_KEY = 'sb_publishable_OMZxSBZKyxyH5lNY_LPs0w_UYa-DQ05';
+let sb = null, api = null;
+S.groupObjs = []; S.settings = null;
+const groupIdOf = name => S.groupObjs.find(g=>g.name===name)?.id || null;
+const groupNameOf = id => S.groupObjs.find(g=>g.id===id)?.name || '';
+function mkCode(prefix){ const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(const x of crypto.getRandomValues(new Uint32Array(4))) s+=a[x%a.length];
+  const p = (prefix||'').toUpperCase().normalize('NFD').replace(/[^A-Z0-9]+/g,'').slice(0,8); return (p?p+'-':'')+s; }
+function fromQuizRow(r){ return {title:r.title, subject:r.subject, topic:r.topic||'', description:r.description||'', questions:r.questions||[], authorId:r.author_id,
+  targets:{all:r.target_all, groups:(r.target_groups||[]).map(groupNameOf).filter(Boolean), students:r.target_students||[]}, due:r.due||'', published:r.published, createdAt:r.created_at, updatedAt:r.updated_at}; }
+function fromAttRow(r){ return {answers:r.answers, flags:r.flags, correct:r.correct, total:r.total, score:r.score, tries:r.tries, best:r.best, first:r.first, history:r.history||[], subject:r.subject, topic:r.topic, finishedAt:r.finished_at, startedAt:r.started_at}; }
+const chk = r => { if(r.error) throw r.error; return r.data; };
+
+const sbApi = {
+  async load(){
+    const [p,g,q,a] = await Promise.all([sb.from('profiles').select('*'), sb.from('groups').select('*').order('name'),
+      sb.from('quizzes').select('*').order('created_at',{ascending:false}), sb.from('attempts').select('*')]);
+    S.groupObjs = chk(g); S.config = {groups:S.groupObjs.map(x=>x.name)};
+    S.profiles = {}; S.roles = {};
+    chk(p).forEach(r => { const gn = groupNameOf(r.group_id); S.profiles[r.id] = {name:r.name, email:r.email, group:gn, requested:r.requested, createdAt:r.created_at}; S.roles[r.id] = {role:r.role, group:gn}; });
+    S.quizzes = {}; chk(q).forEach(r => S.quizzes[r.id] = fromQuizRow(r));
+    S.attempts = {}; chk(a).forEach(r => { (S.attempts[r.user_id] ||= {byQuiz:{}}).byQuiz[r.quiz_id] = fromAttRow(r); });
+    S.settings = null;
+    if(myRole()==='admin'){ const s = await sb.from('settings').select('*').maybeSingle(); S.settings = s.data || null; }
+    S.loadedAt = Date.now();
+  },
+  async saveQuiz(id, d){
+    const row = {title:d.title, subject:d.subject, topic:d.topic, description:d.description, questions:d.questions,
+      target_all:d.targets.all, target_groups:d.targets.groups.map(groupIdOf).filter(Boolean), target_students:d.targets.students,
+      due:d.due||null, published:d.published, updated_at:new Date().toISOString()};
+    const r = id ? await sb.from('quizzes').update(row).eq('id',id).select().single()
+                 : await sb.from('quizzes').insert({...row, author_id:S.me.id}).select().single();
+    const saved = chk(r); S.quizzes[saved.id] = fromQuizRow(saved); return saved.id;
+  },
+  async delQuiz(id){ chk(await sb.from('quizzes').delete().eq('id',id)); delete S.quizzes[id]; },
+  async setRole(uid, role){ chk(await sb.from('profiles').update({role}).eq('id',uid)); S.roles[uid] = {...(S.roles[uid]||{}), role}; },
+  async setGroup(uid, name){ chk(await sb.from('profiles').update({group_id:groupIdOf(name)}).eq('id',uid)); S.roles[uid] = {...(S.roles[uid]||{}), group:name}; S.profiles[uid].group = name; },
+  async addGroup(name){ chk(await sb.from('groups').insert({name, code:mkCode(name)})); await this.load(); },
+  async delGroup(name){ chk(await sb.from('groups').delete().eq('id', groupIdOf(name))); await this.load(); },
+  async regenGroup(name){ chk(await sb.from('groups').update({code:mkCode(name)}).eq('id', groupIdOf(name))); await this.load(); },
+  async regenTeacher(){ chk(await sb.from('settings').update({teacher_code:'T-'+mkCode('')}).eq('id',1)); await this.load(); },
+  async rename(name){ chk(await sb.from('profiles').update({name}).eq('id',S.me.id)); S.profiles[S.me.id].name = name; },
+  async submit(qid, answers, startedAt){ const r = chk(await sb.rpc('submit_attempt', {p_quiz:qid, p_answers:answers, p_started:startedAt}));
+    const row = Array.isArray(r) ? r[0] : r; (S.attempts[S.me.id] ||= {byQuiz:{}}).byQuiz[qid] = fromAttRow(row); return fromAttRow(row); },
+  async resetPassword(uid){ const { data, error } = await sb.functions.invoke('reset-password', {body:{user_id:uid}});
+    if(error){ let info={}; try{ info = await error.context.json(); }catch(e){} throw {code: info.error||'failed'}; } return data.password; },
+  async generate(params){
+    const { data, error } = await sb.functions.invoke('generate-quiz', {body:params});
+    if(error){ let info = {}; try{ info = await error.context.json(); }catch(e){} throw {code: info.error || 'ai_failed', limit: info.limit}; }
+    return data.questions;
+  },
+};
+
+const demoApi = {
+  async load(){},
+  async saveQuiz(id, d){ id = id || newId(); S.quizzes[id] = {...clone(d), authorId: S.quizzes[id]?.authorId || S.me.id, createdAt: S.quizzes[id]?.createdAt || new Date().toISOString(), updatedAt:new Date().toISOString()}; return id; },
+  async delQuiz(id){ delete S.quizzes[id]; },
+  async setRole(uid, role){ S.roles[uid] = {...(S.roles[uid]||{}), role}; },
+  async setGroup(uid, name){ S.roles[uid] = {...(S.roles[uid]||{}), group:name}; S.profiles[uid].group = name; },
+  async addGroup(name){ S.groupObjs.push({id:newId(), name, code:mkCode(name)}); S.config.groups = S.groupObjs.map(g=>g.name); },
+  async delGroup(name){ S.groupObjs = S.groupObjs.filter(g=>g.name!==name); S.config.groups = S.groupObjs.map(g=>g.name); },
+  async regenGroup(name){ const g = S.groupObjs.find(x=>x.name===name); if(g) g.code = mkCode(name); },
+  async regenTeacher(){ S.settings.teacher_code = 'T-'+mkCode(''); },
+  async rename(name){ S.profiles[S.me.id].name = name; },
+  async submit(qid, answers, startedAt){ const q = S.quizzes[qid]; const flags = q.questions.map((it,i)=>answers[i]===it.correct); const correct = flags.filter(Boolean).length;
+    const total = flags.length, score = Math.round(correct/total*100), now = new Date().toISOString(), prev = att(S.me.id, qid);
+    const rec = {answers, flags, correct, total, score, finishedAt:now, startedAt, subject:q.subject, topic:q.topic, tries:(prev?.tries||0)+1, best:Math.max(prev?.best??0,score), first:prev?.first??score, history:[...(prev?.history||[]),{score,at:now}].slice(-10)};
+    (S.attempts[S.me.id] ||= {byQuiz:{}}).byQuiz[qid] = rec; return rec; },
+  async resetPassword(uid){ return 'vibe-demo-1234'; },
+  async generate(p){ await new Promise(r=>setTimeout(r,900)); const src = SAMPLE_QUIZZES.find(q=>q.subject===p.subject) || SAMPLE_QUIZZES[0];
+    return clone(src.questions).slice(0, p.count); },
+};
+
+function seedDemo(store){
+  const d = (n) => new Date(Date.now() - n*86400000).toISOString();
+  const due = (n) => new Date(Date.now() + n*86400000).toISOString().slice(0,10);
+  store.config.school = {groups:['MSA-A','MSA-B']};
+  store.profiles = {
+    'u-katya':{name:'Катя', group:'', requested:'admin', createdAt:d(30)},
+    'u-olga':{name:'Ольга Петренко', group:'', requested:'teacher', createdAt:d(25)},
+    'u-anya':{name:'Аня Коваленко', group:'MSA-A', requested:'student', createdAt:d(20)},
+    'u-max':{name:'Максим Шевчук', group:'MSA-A', requested:'student', createdAt:d(18)},
+    'u-dima':{name:'Дима Бондар', group:'MSA-B', requested:'student', createdAt:d(15)},
+    'u-sofia':{name:'София Мельник', group:'MSA-B', requested:'student', createdAt:d(2)},
+    'u-igor':{name:'Игорь Ткач', group:'', requested:'teacher', createdAt:d(1)},
+  };
+  store.roles = {'u-katya':{role:'admin'}, 'u-olga':{role:'teacher'}};
+  const dues = {'sample-prozent':due(3),'sample-gleichungen':due(-1),'sample-tenses':due(5),'sample-nebensatz':due(7)};
+  SAMPLE_QUIZZES.forEach((q,i) => store.quizzes[q.id] = {...clone(q), authorId: i%2 ? 'u-olga':'u-katya', targets:{all:true, groups:[], students:[]}, due:dues[q.id], published:true, createdAt:d(14-i*3), updatedAt:d(14-i*3)});
+  store.quizzes['draft-1'] = {title:'Artikel: der, die, das', subject:'de', topic:'Artikel', description:'', questions:[{q:'___ Mädchen spielt.', options:['Der','Die','Das'], correct:2, explanation:'Все слова на -chen среднего рода → das.'}], authorId:'u-olga', targets:{all:false,groups:['MSA-B'],students:[]}, due:'', published:false, createdAt:d(1), updatedAt:d(1)};
+  const mk = (qid, flags, daysAgo) => { const q = store.quizzes[qid]; const correct = flags.filter(Boolean).length, total = flags.length, score = Math.round(correct/total*100);
+    const answers = flags.map((f,i)=> f ? q.questions[i].correct : (q.questions[i].correct+1)%q.questions[i].options.length);
+    return {answers, flags, correct, total, score, best:score, first:score, tries:1, finishedAt:d(daysAgo), history:[{score, at:d(daysAgo)}], subject:q.subject, topic:q.topic}; };
+  store.attempts = {
+    'u-anya':{byQuiz:{'sample-prozent':mk('sample-prozent',[1,1,0,1],2), 'sample-tenses':mk('sample-tenses',[1,1,1,1],1), 'sample-nebensatz':mk('sample-nebensatz',[1,0,0,1],0.2)}},
+    'u-max':{byQuiz:{'sample-prozent':mk('sample-prozent',[1,0,0,0],3), 'sample-gleichungen':mk('sample-gleichungen',[1,1,1],2), 'sample-nebensatz':mk('sample-nebensatz',[1,1,1,0],0.5)}},
+    'u-dima':{byQuiz:{'sample-tenses':mk('sample-tenses',[0,1,0,1],4), 'sample-prozent':mk('sample-prozent',[1,1,1,1],6)}},
+  };
+}
+
+/* ===================== Derived ===================== */
+const prof = id => S.profiles[id];
+const nameOf = id => prof(id)?.name || 'Без имени';
+function roleOf(id){
+  const r = S.roles[id]?.role;
+  if(r==='admin'||r==='teacher'||r==='blocked'||r==='student') return r;
+  const p = prof(id); if(!p) return 'none';
+  return p.requested==='teacher' ? 'pending' : 'student';
+}
+function myRole(){ if(S.me.isOwner) return 'admin'; return roleOf(S.me.id); }
+const isStaff = () => ['admin','teacher'].includes(myRole());
+const groupOf = id => S.roles[id]?.group || prof(id)?.group || '';
+const groups = () => (S.config.groups||[]);
+const students = () => Object.keys(S.profiles).filter(id => roleOf(id)==='student');
+const att = (uid, qid) => S.attempts[uid]?.byQuiz?.[qid];
+function isAssigned(q, uid){
+  if(!q.published) return false; const t = q.targets || {all:true};
+  return !!(t.all || (t.groups||[]).includes(groupOf(uid)) || (t.students||[]).includes(uid));
+}
+const assignedTo = q => students().filter(uid => isAssigned(q, uid));
+const quizList = () => Object.entries(S.quizzes).map(([id,q]) => ({id, ...q})).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+function targetText(q){ const t=q.targets||{all:true}; if(t.all) return 'Все ученики';
+  const parts=[]; if(t.groups?.length) parts.push('Группы: '+t.groups.join(', ')); if(t.students?.length) parts.push(t.students.length+' '+plural(t.students.length,'ученик','ученика','учеников'));
+  return parts.join(' · ') || 'Никому не назначен'; }
+function quizStats(q){
+  const as = assignedTo(q); const done = as.filter(u => att(u,q.id));
+  return {assigned:as.length, done:done.length, avg: avg(done.map(u=>att(u,q.id).score))};
+}
+function studentStats(uid){
+  const qs = quizList().filter(q => isAssigned(q, uid));
+  const done = qs.filter(q => att(uid,q.id));
+  const bySubj = {}; SUBJ_KEYS.forEach(k => { const d = done.filter(q=>q.subject===k);
+    const c = d.reduce((s,q)=>s+att(uid,q.id).correct,0), t = d.reduce((s,q)=>s+att(uid,q.id).total,0);
+    bySubj[k] = {done:d.length, assigned:qs.filter(q=>q.subject===k).length, pct: t? Math.round(c/t*100) : null}; });
+  const topics = {};
+  done.forEach(q => { const a = att(uid,q.id); const key = q.subject+'|'+(q.topic||'Без темы');
+    (topics[key] ||= {subject:q.subject, topic:q.topic||'Без темы', c:0, t:0, quizzes:[]});
+    topics[key].c += a.correct; topics[key].t += a.total; topics[key].quizzes.push(q.id); });
+  const topicArr = Object.values(topics).map(x => ({...x, pct: Math.round(x.c/x.t*100)}));
+  const last = done.map(q => att(uid,q.id).finishedAt).sort().pop();
+  const all = done.reduce((s,q)=>s+att(uid,q.id).correct,0), allT = done.reduce((s,q)=>s+att(uid,q.id).total,0);
+  return {qs, done, bySubj, topics:topicArr, last, pct: allT ? Math.round(all/allT*100) : null};
+}
+
+/* ===================== Render ===================== */
+const $app = document.getElementById('app');
+let renderQueued = false;
+function render(){
+  if(S.mode==='loading') return;
+  const sy = window.scrollY;
+  $app.innerHTML = view();
+  if(S._keepScroll) window.scrollTo(0, sy); S._keepScroll = false;
+  if(S._focus){ const el = document.querySelector(S._focus); if(el){ el.focus(); } S._focus=null; }
+}
+function softRender(){ // from snapshots: avoid clobbering forms
+  if(S.sub && ['edit','play'].includes(S.sub.name)) return;
+  if(document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) { renderQueued = true; return; }
+  S._keepScroll = true; render();
+}
+document.addEventListener('focusout', () => setTimeout(()=>{ if(renderQueued && !(document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))){ renderQueued=false; softRender(); } }, 50));
+
+function toast(msg, err=false){ const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast'+(err?' err':''); clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.add('hidden'), 3200); }
+function writeErr(e){ console.warn(e); const c = e?.code; if(c==='42501'||/row-level security|not allowed/i.test(e?.message||'')){ toast('Нет прав на это действие.', true); return; }
+  if(c==='invalid_argument'){ S.readOnly = true; toast('Нет прав на сохранение. Попросите администратора выдать вам доступ.', true); }
+  else if(c==='quota_exceeded') toast('Хранилище заполнено - сообщите администратору.', true);
+  else toast('Не удалось сохранить. Попробуйте ещё раз.', true); }
+
+function tabsFor(role){
+  if(role==='student') return [['home','Мои квизы'],['progress','Прогресс']];
+  if(role==='teacher') return [['teach','Квизы'],['students','Ученики']];
+  if(role==='admin') return [['admin','Обзор'],['teach','Квизы'],['students','Ученики'],['manage','Люди и группы']];
+  return [];
+}
+const roleName = {admin:'Админ', teacher:'Преподаватель', student:'Ученик', pending:'Ожидает', blocked:'Заблокирован', none:'-'};
+
+function view(){
+  if(S.mode==='auth' || !S.me) return authView();
+  const role = myRole();
+  let demo = '';
+  if(S.isDemo){
+    const opts = [['u-katya','Админ'],['u-olga','Преподаватель'],['u-anya','Ученик (Аня)'],['u-max','Ученик (Максим)']];
+    demo = `<div class="demo"><b>Демо-режим</b> - данные не сохраняются. Смотреть как: ${opts.map(([id,l])=>`<button data-a="demoAs" data-id="${id}" class="${S.me.id===id?'on':''}">${l}</button>`).join('')}</div>`;
+  }
+  if(!prof(S.me.id)) return `<div class="wrap"><div class="onb">${mascot('#d6452f',120,'sad')}<h1>Профиль не найден</h1><p class="muted">${S.loadError?'Не удалось загрузить данные. Проверь интернет и обнови страницу.':'Попробуй выйти и войти снова.'}</p><button class="btn" data-a="logout">Выйти</button></div></div>`;
+  if(role==='pending') return demo + header(role) + waitScreen();
+  if(role==='blocked') return demo + header(role) + `<div class="wrap"><div class="onb">${mascot('#d6452f',120,'sad')}<h1>Доступ закрыт</h1><p class="muted">Свяжитесь с администратором школы.</p></div></div>`;
+  const tabs = tabsFor(role);
+  if(!S.tab || !tabs.some(t=>t[0]===S.tab)) S.tab = tabs[0][0];
+  let body = '';
+  const sub = S.sub;
+  if(sub?.name==='intro') body = introView(sub.qid);
+  else if(sub?.name==='play') body = playView();
+  else if(sub?.name==='edit') body = editorView();
+  else if(sub?.name==='results') body = resultsView(sub.qid);
+  else if(sub?.name==='student') body = studentDetailView(sub.uid);
+  else body = ({home:homeView, progress:()=>progressView(S.me.id,true), teach:teachView, students:studentsView, admin:adminView, manage:manageView})[S.tab]();
+  const slow = S.slow ? `<div class="wrap" style="padding-bottom:0"><div class="note">Данные пока не загрузились до конца - то, что вы видите, может быть неактуально.</div></div>` : '';
+  return demo + header(role, tabs) + slow + `<main class="wrap">${body}</main>`;
+}
+function header(role, tabs=[]){
+  const nm = nameOf(S.me.id);
+  return `<header class="top"><div class="top-in">
+    <a class="logo" href="#${tabs[0]?.[0]||''}" data-a="tab" data-tab="${tabs[0]?.[0]||''}"><span class="wm">VIBE<span>ABSCHLUSS</span></span><span class="tag">QUIZ</span></a>
+    <nav class="tabs">${tabs.map(([k,l])=>`<button class="tab ${S.tab===k&&!S.sub?'on':''}" data-a="tab" data-tab="${k}">${l}</button>`).join('')}</nav>
+    <div class="spacer"></div>
+    <div class="me"><span class="nm">${esc(nm)}</span><span class="rolebadge">${roleName[role]||''}</span><span class="avatar">${esc(initials(nm))}</span>${S.isDemo?'':'<button class="tab" data-a="logout" title="Выйти" style="padding:6px 10px;color:rgba(245,250,218,.75)">Выйти</button>'}</div>
+  </div></header>`;
+}
+
+/* ---------- Auth ---------- */
+function trAuth(m){ m = String(m||'');
+  if(/Invalid login/i.test(m)) return 'Неверный e-mail или пароль.';
+  if(/not confirmed/i.test(m)) return 'E-mail ещё не подтверждён - открой письмо от нас и нажми на ссылку.';
+  if(/already registered|already been registered/i.test(m)) return 'Этот e-mail уже зарегистрирован. Попробуй войти.';
+  if(/Password should|weak/i.test(m)) return 'Пароль слишком простой: минимум 8 символов, лучше с цифрами.';
+  if(/rate limit|too many|security purposes/i.test(m)) return 'Слишком много попыток подряд. Подожди пару минут и попробуй снова.';
+  if(/school code|Database error saving new user/i.test(m)) return 'Код школы не подошёл. Проверь его у преподавателя.';
+  if(/valid email|invalid format|Unable to validate email/i.test(m)) return 'Проверь, правильно ли написан e-mail.';
+  if(/fetch|network/i.test(m)) return 'Нет связи с сервером. Проверь интернет.';
+  if(/not authorized|confirmation email|sending/i.test(m)) return 'Регистрация временно не работает: администратору нужно отключить подтверждение e-mail в Supabase.';
+  return 'Ошибка: ' + m; }
+function authView(){
+  const m = S.authMode || 'login'; const f = S.authForm;
+  const err = S.authErr ? `<div class="errbox">${esc(S.authErr)}</div>` : '';
+  const ok = S.authOk ? `<div class="note" style="margin-bottom:14px">${esc(S.authOk)}</div>` : '';
+  const inp = (id, label, type, key, ac, extra='') => `<div class="field"><label for="${id}">${label}</label><input id="${id}" class="input" type="${type}" autocomplete="${ac}" data-af="${key}" value="${type==='password'?'':esc(f[key]||'')}" ${extra}></div>`;
+  let title = '', form = '';
+  if(m==='login'){ title = 'Вход';
+    form = `${inp('a-email','E-mail','email','email','email')}${inp('a-pass','Пароль','password','password','current-password')}
+      <button class="btn wide" type="submit" ${S.busy?'disabled':''}>${S.busy?'Входим…':'Войти'}</button>
+      <div class="authlinks"><span class="hint" style="max-width:180px">Забыли пароль? Напиши преподавателю - он выдаст новый.</span><button type="button" class="linkbtn" data-a="authMode" data-v="signup">Нет аккаунта? <b>Регистрация</b></button></div>`; }
+  if(m==='signup'){ title = 'Регистрация';
+    const cs = S.codeStatus; const csHtml = !cs ? '<span class="hint">Код выдаёт школа - спроси у преподавателя.</span>' : cs==='bad' ? '<span class="hint sc-bad">Такого кода нет.</span>'
+      : `<span class="hint sc-good">✓ ${cs==='teacher'?'Код преподавателя':cs==='admin'?'Код администратора':'Группа: '+esc(cs.replace('student:',''))}</span>`;
+    form = `${inp('a-name','Имя и фамилия','text','name','name','maxlength="60"')}${inp('a-email','E-mail','email','email','email')}
+      ${inp('a-pass','Пароль (минимум 8 символов)','password','password','new-password','minlength="8"')}
+      <div class="field"><label for="a-code">Код школы</label><input id="a-code" class="input mono" type="text" autocomplete="off" data-af="code" value="${esc(f.code||'')}" placeholder="Напр.: MSAA-7K2Q" style="text-transform:uppercase">${csHtml}</div>
+      <button class="btn wide" type="submit" ${S.busy?'disabled':''}>${S.busy?'Создаём…':'Создать аккаунт'}</button>
+      <div class="authlinks"><span></span><button type="button" class="linkbtn" data-a="authMode" data-v="login">Уже есть аккаунт? <b>Войти</b></button></div>`; }
+  if(m==='forgot'){ title = 'Восстановить пароль';
+    form = `<p class="muted small" style="margin-top:0">Пришлём ссылку для нового пароля на e-mail.</p>${inp('a-email','E-mail','email','email','email')}
+      <button class="btn wide" type="submit" ${S.busy?'disabled':''}>${S.busy?'Отправляем…':'Отправить ссылку'}</button>
+      <div class="authlinks"><span></span><button type="button" class="linkbtn" data-a="authMode" data-v="login">← Назад ко входу</button></div>`; }
+  if(m==='reset'){ title = 'Новый пароль';
+    form = `${inp('a-pass','Новый пароль (минимум 8 символов)','password','password','new-password','minlength="8"')}
+      <button class="btn wide" type="submit" ${S.busy?'disabled':''}>${S.busy?'Сохраняем…':'Сохранить пароль'}</button>`; }
+  return `<div class="wrap"><div class="onb">${mascot('#ddb049',120,'happy')}
+    <div class="brandfont" style="font-size:30px;line-height:1;color:var(--forest);margin-top:6px">VIBE <span style="color:var(--green)">ABSCHLUSS</span></div>
+    <p class="muted" style="margin:6px 0 0">Квизы для подготовки к MSA</p>
+    <form class="card" data-submit="${m}" novalidate><h2 style="margin-bottom:14px">${title}</h2>${err}${ok}${form}</form></div></div>`;
+}
+
+/* ---------- Manage (admin) ---------- */
+function codeRow(label, code, actions){
+  return `<div class="coderow"><div style="flex:1;min-width:0"><b>${label}</b></div><code class="code">${esc(code||'-')}</code>
+    <button class="iconbtn" data-a="copy" data-v="${esc(code||'')}" title="Скопировать">⧉</button>${actions||''}</div>`;
+}
+function resetBox(){ const r = S.lastReset; if(!r) return '';
+  return `<div class="note" style="margin:14px 0;border-color:#9fd3b5;background:#eef8f1"><b>🔑 Новый пароль для ${esc(nameOf(r.uid))}:</b> <code class="code">${esc(r.pw)}</code>
+    <button class="btn sm ghost" data-a="copy" data-v="${esc(r.pw)}">Копировать</button><div class="small muted" style="margin-top:6px">Передайте его ученику лично. Старый пароль больше не работает. Это окно исчезнет при обновлении страницы.</div></div>`; }
+function manageView(){
+  const people = Object.keys(S.profiles).sort((a,b)=>nameOf(a).localeCompare(nameOf(b)));
+  const link = location.origin + location.pathname;
+  return `<h1>Люди и группы</h1>${resetBox()}
+    <div class="note" style="margin-top:14px"><b>Как пригласить учеников и преподавателей</b><ol>
+      <li>Отправьте ссылку на сайт: <b>${esc(link)}</b> <button class="btn sm ghost" data-a="copy" data-v="${esc(link)}" style="padding:3px 10px">Копировать</button></li>
+      <li>И код: ученику - код его группы, преподавателю - код преподавателя (ниже).</li>
+      <li>Человек регистрируется: имя, e-mail, пароль и код - и сразу попадает в свою группу.</li></ol>
+      <div class="small muted" style="margin-top:6px">Если код «утёк» - нажмите ↻, старый код перестанет работать. Уже зарегистрированных это не затронет.</div></div>
+    <div class="section-title"><h2>Коды</h2></div>
+    <div class="card">
+      ${codeRow('🧑‍🏫 Код преподавателя', S.settings?.teacher_code, `<button class="iconbtn" data-a="regenTeacher" title="Новый код">↻</button>`)}
+      ${S.groupObjs.map(g=>codeRow(`🎒 Группа ${esc(g.name)} <span class="muted small">· ${students().filter(u=>groupOf(u)===g.name).length} уч.</span>`, g.code,
+        `<button class="iconbtn" data-a="regenGroup" data-v="${esc(g.name)}" title="Новый код">↻</button><button class="iconbtn" data-a="delGroup" data-v="${esc(g.name)}" title="Удалить группу">✕</button>`)).join('')}
+      <div class="row" style="margin-top:14px"><input class="input" id="newgroup" placeholder="Новая группа, напр.: MSA-A" style="max-width:280px" maxlength="30"><button class="btn sm" data-a="addGroup">＋ Добавить группу</button></div>
+    </div>
+    <div class="section-title"><h2>Все пользователи</h2><span class="count">${people.length}</span></div>
+    <div class="tablewrap"><table><thead><tr><th>Имя</th><th>E-mail</th><th>Роль</th><th>Группа</th><th>С нами</th><th></th></tr></thead><tbody>
+      ${people.map(u=>{ const r = roleOf(u); const isMe = u===S.me.id;
+        return `<tr><td><b>${esc(nameOf(u))}</b>${isMe?' <span class="muted small">(вы)</span>':''}</td><td class="muted small">${esc(prof(u).email||'')}</td>
+        <td>${isMe||r==='admin'?roleName[r]:`<select class="input" style="padding:6px 8px;min-width:150px" data-role="${u}">${['student','teacher','blocked'].map(x=>`<option value="${x}" ${r===x?'selected':''}>${roleName[x]}</option>`).join('')}</select>`}</td>
+        <td>${r==='student'?`<select class="input" style="padding:6px 8px;min-width:120px" data-group="${u}"><option value="">-</option>${groups().map(g=>`<option ${groupOf(u)===g?'selected':''}>${esc(g)}</option>`).join('')}</select>`:'<span class="muted">-</span>'}</td>
+        <td class="muted">${fmtWhen(prof(u).createdAt)}</td><td>${isMe||r==='admin'?'':`<button class="btn sm ghost" data-a="resetPw" data-uid="${u}" title="Выдать новый пароль">🔑 Пароль</button>`}</td></tr>`; }).join('')}
+    </tbody></table></div>`;
+}
+
+/* ---------- AI panel in editor ---------- */
+function aiPanel(E){
+  const opt = (v, cur, l) => `<option value="${v}" ${String(cur)===String(v)?'selected':''}>${l??v}</option>`;
+  return `<div class="aibox"><div class="row" style="gap:10px"><span class="aistar">✨</span><div style="flex:1"><h3>Сгенерировать вопросы с ИИ</h3>
+      <div class="hint">Опишите, что нужно - Claude напишет вопросы, варианты и объяснения. Потом всё можно отредактировать.</div></div></div>
+    <textarea class="input" data-ed="aiPrompt" rows="3" style="margin-top:12px" placeholder="Напр.: 8 задач на Prozentrechnung - Rabatt, Mehrwertsteuer, Zinsen. Как на MSA, с короткими текстовыми задачами.">${esc(E.aiPrompt||'')}</textarea>
+    <div class="row" style="margin-top:10px;gap:10px">
+      <label class="mini">Вопросов <select class="input" data-ed="aiCount">${[3,4,5,6,8,10,12,15].map(n=>opt(n, E.aiCount||8)).join('')}</select></label>
+      <label class="mini">Уровень <select class="input" data-ed="aiLevel">${opt('leicht',E.aiLevel||'mittel','лёгкий')}${opt('mittel',E.aiLevel||'mittel','средний (MSA)')}${opt('schwer',E.aiLevel||'mittel','сложный')}</select></label>
+      <label class="mini">Объяснения <select class="input" data-ed="aiLang">${opt('ru',E.aiLang||'ru','русский')}${opt('uk',E.aiLang||'ru','українська')}</select></label>
+      <span class="spacer"></span>
+      <button class="btn gold" data-a="aiGen" ${E.aiBusy?'disabled':''}>${E.aiBusy?'<span class="spin"></span> Claude пишет… ~30 сек':'✨ Сгенерировать'}</button>
+    </div>
+    ${E.aiNote?`<div class="small" style="margin-top:10px;font-weight:700;color:var(--forest)">${esc(E.aiNote)}</div>`:''}
+  </div>`;
+}
+
+function waitScreen(){
+  return `<div class="wrap"><div class="onb">${mascot('#2f5fc4',130)}<h1>Заявка отправлена</h1>
+  <p class="muted">Администратор школы должен подтвердить, что вы преподаватель. Как только это произойдёт, здесь откроется панель преподавателя.</p></div></div>`;
+}
+
+/* ---------- Student: home ---------- */
+function subjChips(){
+  return `<div class="row" style="gap:8px">
+    <button class="chip ${S.filter==='all'?'on':''}" data-a="filter" data-v="all">Все</button>
+    ${SUBJ_KEYS.map(k=>`<button class="chip s-${k} ${S.filter===k?'on':''}" data-a="filter" data-v="${k}"><span class="dot" style="background:${SUBJ[k].color}"></span>${SUBJ[k].ru}</button>`).join('')}
+  </div>`;
+}
+function quizCard(q, uid){
+  const a = att(uid, q.id); const late = !a && q.due && q.due < today();
+  const pill = a ? `<span class="pill done">Пройден</span>` : late ? `<span class="pill late">Просрочен</span>` : `<span class="pill new">Новый</span>`;
+  return `<button class="qcard s-${q.subject}" data-a="openQuiz" data-id="${q.id}">
+    <div class="qband">${blobSvg('#fff')}<span class="subj">${SUBJ[q.subject].de}</span><span class="spacer"></span>${pill}</div>
+    <div class="qbody"><h3>${esc(q.title)}</h3><div class="muted small">${esc(q.topic||'')} · ${q.questions.length} ${plural(q.questions.length,'вопрос','вопроса','вопросов')}</div>
+      <div class="qfoot">${q.due ? `<span>📅 до ${fmtDate(q.due)}</span>`:''}<span class="spacer"></span>
+      ${a ? `<span class="score ${scCls(a.score)}">${a.score}%</span>` : `<span style="color:var(--forest);font-weight:800">Начать →</span>`}</div>
+    </div></button>`;
+}
+function homeView(){
+  const uid = S.me.id; const st = studentStats(uid);
+  let qs = st.qs; if(S.filter!=='all') qs = qs.filter(q=>q.subject===S.filter);
+  const todo = qs.filter(q=>!att(uid,q.id)).sort((a,b)=>(a.due||'9').localeCompare(b.due||'9'));
+  const done = qs.filter(q=>att(uid,q.id)).sort((a,b)=>att(uid,b.id).finishedAt.localeCompare(att(uid,a.id).finishedAt));
+  const first = (nameOf(uid).split(' ')[0]);
+  const newCount = st.qs.filter(q=>!att(uid,q.id)).length;
+  const bySubjNew = SUBJ_KEYS.map(k=>[k, st.qs.filter(q=>q.subject===k && !att(uid,q.id)).length]).filter(x=>x[1]);
+  return `<div class="hello"><div style="flex:1">
+      <h1>Привет, ${esc(first)}!</h1>
+      <div class="sub">${newCount ? `У тебя ${newCount} ${plural(newCount,'новый квиз','новых квиза','новых квизов')}: ${bySubjNew.map(([k,n])=>`<b style="color:${k==='en'?'#ffb27a':k==='de'?'#9db8f2':'#e7a3a3'}">${n} ${SUBJ[k].ru.toLowerCase()}</b>`).join(', ')}` : 'Все задания пройдены - так держать!'}</div>
+      <div class="stats"><div class="stat"><b>${st.done.length}/${st.qs.length}</b><span>пройдено</span></div>
+      <div class="stat"><b>${st.pct==null?'-':st.pct+'%'}</b><span>средний балл</span></div></div>
+    </div><div class="masc">${mascot('#ddb049',110, st.pct!=null && st.pct<60 ? 'cool':'happy')}</div></div>
+    <div style="margin-top:18px">${subjChips()}</div>
+    <div class="section-title"><h2>Нужно пройти</h2><span class="count">${todo.length}</span></div>
+    ${todo.length ? `<div class="grid">${todo.map(q=>quizCard(q,uid)).join('')}</div>` : `<div class="card empty">${mascot('#ddb049',70,'happy')}<div>Новых квизов нет. Отдыхай 😎</div></div>`}
+    ${done.length ? `<div class="section-title"><h2>Пройдено</h2><span class="count">${done.length}</span></div><div class="grid">${done.map(q=>quizCard(q,uid)).join('')}</div>`:''}`;
+}
+
+/* ---------- Intro / Play ---------- */
+function introView(qid){
+  const q = S.quizzes[qid]; if(!q) return backBtn()+`<div class="card empty">Квиз не найден или удалён.</div>`;
+  const a = att(S.me.id, qid);
+  return `${backBtn()}<div class="play"><div class="play-head s-${q.subject}"><span class="subj">${SUBJ[q.subject].de}</span><span class="spacer"></span><span>${esc(q.topic||'')}</span></div>
+    <div class="play-body" style="text-align:center">
+      ${mascot(SUBJ[q.subject].color,110)}
+      <h1 style="margin-top:6px">${esc(q.title)}</h1>
+      ${q.description?`<p class="muted">${esc(q.description)}</p>`:''}
+      <p><b>${q.questions.length}</b> ${plural(q.questions.length,'вопрос','вопроса','вопросов')}${q.due?` · сдать до <b>${fmtDate(q.due)}</b>`:''}</p>
+      <p class="muted small">После каждого ответа сразу увидишь, правильно ли, и объяснение.</p>
+      ${a ? `<div class="card" style="margin:16px auto;max-width:360px;text-align:left"><div class="row"><span>Твой результат</span><span class="spacer"></span><b class="${scCls(a.score)}" style="font-size:22px">${a.score}%</b></div>
+        <div class="muted small">Попыток: ${a.tries||1} · лучший: ${a.best??a.score}% · ${fmtWhen(a.finishedAt)}</div></div>`:''}
+      <div class="row" style="justify-content:center;margin-top:10px">
+        ${a ? `<button class="btn ghost" data-a="review" data-id="${qid}">Посмотреть ответы</button>`:''}
+        <button class="btn" data-a="startQuiz" data-id="${qid}">${a?'Пройти ещё раз':'Начать квиз'} →</button>
+      </div>
+    </div></div>`;
+}
+function playView(){
+  const P = S.play, q = P.quiz;
+  if(P.finished) return resultScreen();
+  const item = q.questions[P.i]; const n = q.questions.length;
+  const L = 'ABCDEF';
+  const opts = item.options.map((o,j)=>{
+    let cls = ''; if(P.revealed){ if(j===item.correct) cls='right'; else if(j===P.picked) cls='wrong'; else cls='dim'; }
+    return `<button class="opt ${cls}" data-a="pick" data-j="${j}" ${P.revealed?'disabled':''}><span class="let">${P.revealed&&j===item.correct?'✓':P.revealed&&j===P.picked?'✗':L[j]}</span><span>${esc(o)}</span></button>`;
+  }).join('');
+  const ok = P.picked===item.correct;
+  const exp = P.revealed ? `<div class="explain ${ok?'':'bad'}" role="status"><div class="verdict">${ok ? pick(['Верно! 🎉','Точно! 💪','Да, так и есть ✓','Отлично!']) : `Неверно. Правильный ответ: ${L[item.correct]}`}</div>
+     ${item.explanation ? `<p>${esc(item.explanation)}</p>` : `<p class="muted">Объяснение не добавлено.</p>`}</div>` : '';
+  return `<div class="play"><div class="play-head s-${q.subject}"><span class="subj">${SUBJ[q.subject].de}</span><span class="small" style="opacity:.85">${esc(q.title)}</span><span class="spacer"></span><b>${P.i+1}/${n}</b></div>
+    <div class="play-body">
+      <div class="progress"><i style="width:${(P.i + (P.revealed?1:0))/n*100}%"></i></div>
+      <div class="qtext">${esc(item.q)}</div>
+      <div class="opts">${opts}</div>${exp}
+      <div class="play-nav"><button class="btn ghost sm" data-a="quitPlay">Выйти</button>
+      ${P.revealed ? `<button class="btn" data-a="next" id="nextbtn">${P.i+1<n?'Дальше →':'Завершить ✓'}</button>`:`<span class="muted small">Выбери ответ</span>`}</div>
+    </div></div>`;
+}
+const pick = arr => arr[(S.play?.i||0) % arr.length];
+function resultScreen(){
+  const P = S.play, q = P.quiz; const r = P.result;
+  const mood = r.score>=80?'happy':r.score>=60?'cool':'sad';
+  const msg = r.score===100?'Идеально! Все ответы верные 🔥':r.score>=80?'Супер результат!':r.score>=60?'Неплохо! Посмотри ошибки ниже.':'Есть над чем поработать - разбери объяснения и попробуй ещё раз.';
+  return `<div class="play"><div class="play-head s-${q.subject}"><span class="subj">${SUBJ[q.subject].de}</span><span class="small">${esc(q.title)}</span></div>
+    <div class="play-body"><div class="result-hero">${mascot(SUBJ[q.subject].color,110,mood)}
+      <div class="big ${scCls(r.score)}">${r.score}%</div><p><b>${r.correct} из ${r.total}</b> правильно · ${msg}</p>
+      ${P.saving?'<p class="muted small">Сохраняем…</p>':P.saveFailed?'<p class="small sc-bad">Результат не сохранился.</p>':''}
+      <div class="row" style="justify-content:center"><button class="btn ghost" data-a="tab" data-tab="home">К квизам</button><button class="btn" data-a="startQuiz" data-id="${q.id}">Ещё раз</button></div></div>
+      <h3 style="margin-top:22px">Разбор</h3>${reviewList(q, r.answers)}</div></div>`;
+}
+function reviewList(q, answers){
+  const L='ABCDEF';
+  return `<div class="review">${q.questions.map((it,i)=>{ const a = answers?.[i]; const ok = a===it.correct;
+    return `<details ${ok?'':'open'}><summary><span class="mk ${ok?'ok':'no'}">${ok?'✓':'✗'}</span><span>${i+1}. ${esc(it.q)}</span></summary>
+      <div class="ans">${a==null?'<span class="muted">Нет ответа</span>':ok?`Ответ: <b>${esc(it.options[a])}</b>`:`Ответ: <s>${esc(it.options[a]??'?')}</s> → правильно: <b>${L[it.correct]}) ${esc(it.options[it.correct])}</b>`}
+      ${it.explanation?`<div class="muted" style="margin-top:6px;white-space:pre-wrap">${esc(it.explanation)}</div>`:''}</div></details>`; }).join('')}</div>`;
+}
+const backBtn = (label='← Назад') => `<button class="back" data-a="back">${label}</button>`;
+
+/* ---------- Progress ---------- */
+function progressView(uid, self){
+  const st = studentStats(uid);
+  const subjCards = SUBJ_KEYS.map(k=>{ const s = st.bySubj[k];
+    return `<div class="subjcard s-${k}">${blobSvg('#fff')}<div class="subj">${SUBJ[k].de}</div><div class="pct">${s.pct==null?'-':s.pct+'%'}</div><div class="meta">пройдено ${s.done} из ${s.assigned}</div></div>`; }).join('');
+  const topics = st.topics.slice().sort((a,b)=>a.subject.localeCompare(b.subject)||a.pct-b.pct);
+  const weak = st.topics.filter(t=>t.pct<70).sort((a,b)=>a.pct-b.pct).slice(0,3);
+  const hist = st.done.slice().sort((a,b)=>att(uid,b.id).finishedAt.localeCompare(att(uid,a.id).finishedAt));
+  return `${self?`<h1>Мой прогресс</h1><p class="muted">Процент правильных ответов по предметам и темам.</p>`:''}
+    <div class="subjects3" style="margin-top:14px">${subjCards}</div>
+    ${weak.length ? `<div class="section-title"><h2>${self?'Над чем поработать':'Слабые темы'}</h2></div><div class="weak">${weak.map(t=>`<div class="w"><span class="subjtag s-${t.subject}">${SUBJ[t.subject].de}</span><div style="flex:1"><b>${esc(t.topic)}</b><div class="small muted">${t.c} из ${t.t} верно</div></div><b class="sc-bad">${t.pct}%</b>${self?`<button class="btn sm ghost" data-a="openQuiz" data-id="${t.quizzes[0]}">Повторить</button>`:''}</div>`).join('')}</div>`:''}
+    <div class="section-title"><h2>По темам</h2></div>
+    ${topics.length ? `<div class="card"><div class="legend" style="margin-bottom:12px"><span>✓ 80%+ отлично</span><span>~ 60–79% нормально</span><span>! ниже 60% - подтянуть</span></div><div class="topics">${topics.map(t=>`<div class="topic"><div class="tn"><span class="sdot" style="background:${SUBJ[t.subject].color}" title="${SUBJ[t.subject].ru}"></span><span>${esc(t.topic)}</span></div>
+      <div class="bar" title="${t.c} из ${t.t} верно"><i style="width:${Math.max(t.pct,3)}%;background:${scColor(t.pct)}"></i></div><div class="lvl" style="color:${scColor(t.pct)}">${t.pct}% · ${lvlLabel(t.pct).split(' ')[1]}</div></div>`).join('')}</div></div>`
+      : `<div class="card empty">Пока нет пройденных квизов.</div>`}
+    ${hist.length ? `<div class="section-title"><h2>История</h2></div><div class="tablewrap"><table><thead><tr><th>Квиз</th><th>Тема</th><th class="num">Результат</th><th class="num">Попыток</th><th>Когда</th></tr></thead><tbody>
+      ${hist.map(q=>{ const a=att(uid,q.id); return `<tr class="click" data-a="${self?'openQuiz':'reviewOf'}" data-id="${q.id}" data-uid="${uid}"><td><span class="subjtag s-${q.subject}">${SUBJ[q.subject].de.slice(0,4)}</span> ${esc(q.title)}</td><td class="muted">${esc(q.topic||'')}</td><td class="num"><b class="${scCls(a.score)}">${a.score}%</b></td><td class="num">${a.tries||1}</td><td class="muted">${fmtWhen(a.finishedAt)}</td></tr>`; }).join('')}
+    </tbody></table></div>`:''}`;
+}
+
+/* ---------- Teacher: quizzes ---------- */
+function teachView(){
+  let qs = quizList(); if(S.filter!=='all') qs = qs.filter(q=>q.subject===S.filter); if(S.onlyMine) qs = qs.filter(q=>q.authorId===S.me.id);
+  return `<div class="row"><h1>Квизы</h1><span class="spacer"></span><button class="btn gold" data-a="newQuiz">＋ Новый квиз</button></div>
+    <div class="row" style="margin:14px 0 16px">${subjChips()}<span class="spacer"></span><button class="chip ${S.onlyMine?'on':''}" data-a="onlyMine">Только мои</button></div>
+    ${qs.length ? qs.map(q=>{ const st = quizStats(q);
+      return `<div class="qrow s-${q.subject}"><div class="info">
+          <h3><span class="subjtag s-${q.subject}">${SUBJ[q.subject].de}</span>${esc(q.title)} ${q.published?'':'<span class="pill draft">Черновик</span>'}</h3>
+          <div class="small muted">${esc(q.topic||'')} · ${q.questions.length} вопр. · ${esc(targetText(q))}${q.due?` · до ${fmtDate(q.due)}`:''} · автор: ${esc(nameOf(q.authorId))}</div></div>
+        <div class="kpis"><div><b>${st.done}/${st.assigned}</b><span>прошли</span></div><div><b class="${scCls(st.avg)}">${st.avg==null?'-':st.avg+'%'}</b><span>средний</span></div></div>
+        <div class="acts"><button class="btn sm" data-a="results" data-id="${q.id}">Результаты</button><button class="btn sm ghost" data-a="editQuiz" data-id="${q.id}">Изменить</button><button class="btn sm ghost" data-a="dupQuiz" data-id="${q.id}" title="Дублировать">⧉</button></div></div>`; }).join('')
+      : `<div class="card empty">${mascot('#ddb049',80)}<div>Квизов пока нет. Нажмите «Новый квиз».</div></div>`}`;
+}
+function resultsView(qid){
+  const q = S.quizzes[qid] && {id:qid, ...S.quizzes[qid]}; if(!q) return backBtn()+`<div class="card empty">Квиз удалён.</div>`;
+  const as = assignedTo(q); const st = quizStats(q);
+  const rows = as.map(u=>({u, a:att(u,qid)})).sort((x,y)=>(y.a?.score??-1)-(x.a?.score??-1));
+  const doneRows = rows.filter(r=>r.a);
+  const perQ = q.questions.map((it,i)=>{ const answered = doneRows.filter(r=>r.a.answers && r.a.answers[i]!=null);
+    const right = answered.filter(r=>r.a.answers[i]===it.correct).length;
+    const wrongCounts = {}; answered.forEach(r=>{ const v=r.a.answers[i]; if(v!==it.correct) wrongCounts[v]=(wrongCounts[v]||0)+1; });
+    const topWrong = Object.entries(wrongCounts).sort((a,b)=>b[1]-a[1])[0];
+    return {i, it, n:answered.length, pct: answered.length? Math.round(right/answered.length*100):null, topWrong}; });
+  return `${backBtn()}<div class="row"><span class="subjtag s-${q.subject}" style="font-size:16px">${SUBJ[q.subject].de}</span><h1>${esc(q.title)}</h1></div>
+    <p class="muted">${esc(q.topic||'')} · ${esc(targetText(q))}${q.due?` · до ${fmtDate(q.due)}`:''}</p>
+    <div class="kpis6"><div class="kpi"><div class="v">${st.done}/${st.assigned}</div><div class="l">прошли квиз</div></div>
+      <div class="kpi"><div class="v ${scCls(st.avg)}">${st.avg==null?'-':st.avg+'%'}</div><div class="l">средний балл</div></div>
+      <div class="kpi"><div class="v">${st.assigned-st.done}</div><div class="l">ещё не прошли</div></div>
+      <div class="kpi"><div class="v">${doneRows.filter(r=>r.a.score<60).length}</div><div class="l">ниже 60%</div></div></div>
+    <div class="section-title"><h2>Ученики</h2></div>
+    ${rows.length ? `<div class="tablewrap"><table><thead><tr><th>Ученик</th><th>Группа</th><th>Статус</th><th class="num">Результат</th><th class="num">Лучший</th><th class="num">Попыток</th><th>Когда</th></tr></thead><tbody>
+      ${rows.map(({u,a})=>`<tr class="click" data-a="openStudent" data-uid="${u}"><td><b>${esc(nameOf(u))}</b></td><td class="muted">${esc(groupOf(u)||'-')}</td>
+        <td>${a?'<span class="pill done">Пройден</span>':(q.due&&q.due<today()?'<span class="pill late">Просрочен</span>':'<span class="pill">Не начат</span>')}</td>
+        <td class="num">${a?`<span class="cellscore ${scCls(a.score)}">${a.score}%</span>`:'-'}</td><td class="num">${a?(a.best??a.score)+'%':'-'}</td><td class="num">${a?(a.tries||1):'-'}</td><td class="muted">${a?fmtWhen(a.finishedAt):''}</td></tr>`).join('')}
+    </tbody></table></div>` : `<div class="card empty">Квиз никому не назначен${q.published?'':' (черновик)'}.</div>`}
+    <div class="section-title"><h2>Вопросы: где ошибаются</h2></div>
+    <div class="card"><div class="topics">${perQ.map(p=>`<div class="topic"><div class="tn" title="${esc(p.it.q)}"><b>${p.i+1}.</b><span>${esc(p.it.q)}</span></div>
+      <div class="bar">${p.pct==null?'':`<i style="width:${Math.max(p.pct,3)}%;background:${scColor(p.pct)}"></i>`}</div>
+      <div class="lvl" style="color:${p.pct==null?'var(--muted)':scColor(p.pct)}">${p.pct==null?'нет данных':p.pct+'% верно'}</div></div>
+      ${p.topWrong && p.pct<80 ? `<div class="small muted" style="margin:-6px 0 4px 0">Частая ошибка: «${esc(p.it.options[p.topWrong[0]]??'?')}» (${p.topWrong[1]})</div>`:''}`).join('')}</div></div>`;
+}
+
+/* ---------- Teacher: students ---------- */
+function studentsView(){
+  let ids = students(); if(S.groupFilter!=='all') ids = ids.filter(u=>groupOf(u)===S.groupFilter);
+  const data = ids.map(u=>({u, st:studentStats(u)})).sort((a,b)=>nameOf(a.u).localeCompare(nameOf(b.u)));
+  const cell = p => p==null?'<span class="muted">-</span>':`<span class="cellscore ${scCls(p)}">${p}%</span>`;
+  return `<h1>Ученики</h1><p class="muted">Нажмите на ученика, чтобы увидеть его прогресс по темам.</p>
+    <div class="row" style="gap:8px;margin:12px 0 14px"><button class="chip ${S.groupFilter==='all'?'on':''}" data-a="gfilter" data-v="all">Все группы</button>${groups().map(g=>`<button class="chip ${S.groupFilter===g?'on':''}" data-a="gfilter" data-v="${esc(g)}">${esc(g)}</button>`).join('')}</div>
+    ${data.length ? `<div class="tablewrap"><table><thead><tr><th>Ученик</th><th>Группа</th><th class="num">Пройдено</th><th class="num">Общий</th>${SUBJ_KEYS.map(k=>`<th class="num"><span class="sdot" style="display:inline-block;background:${SUBJ[k].color}"></span> ${SUBJ[k].ru.slice(0,4)}.</th>`).join('')}<th>Активность</th></tr></thead><tbody>
+      ${data.map(({u,st})=>`<tr class="click" data-a="openStudent" data-uid="${u}"><td><b>${esc(nameOf(u))}</b></td><td class="muted">${esc(groupOf(u)||'-')}</td><td class="num">${st.done.length}/${st.qs.length}</td><td class="num">${cell(st.pct)}</td>
+        ${SUBJ_KEYS.map(k=>`<td class="num">${cell(st.bySubj[k].pct)}</td>`).join('')}<td class="muted">${st.last?fmtWhen(st.last):'ещё не заходил(а)'}</td></tr>`).join('')}
+    </tbody></table></div>` : `<div class="card empty">Учеников пока нет. Пригласите их по ссылке (см. вкладку «Люди и группы»).</div>`}`;
+}
+function studentDetailView(uid){
+  return `${backBtn()}${S.lastReset?.uid===uid?resetBox():''}<div class="row"><span class="avatar" style="width:46px;height:46px;font-size:18px">${esc(initials(nameOf(uid)))}</span><div><h1>${esc(nameOf(uid))}</h1><div class="muted">${esc(groupOf(uid)||'без группы')} · ${roleName[roleOf(uid)]}${prof(uid)?.email?' · '+esc(prof(uid).email):''}</div></div><span class="spacer"></span>${roleOf(uid)==='student'?`<button class="btn sm ghost" data-a="resetPw" data-uid="${uid}">🔑 Новый пароль</button>`:''}</div>${progressView(uid,false)}`;
+}
+
+/* ---------- Editor ---------- */
+function blankQ(){ return {q:'', options:['','','',''], correct:0, explanation:''}; }
+function editorView(){
+  const E = S.editor; const L='ABCDEF';
+  const t = E.targets;
+  return `<div class="editor">${backBtn('← Отмена')}<h1>${E.id?'Редактировать квиз':'Новый квиз'}</h1>
+    ${E.errors?.length?`<div class="errbox" style="margin-top:12px">${E.errors.map(esc).join('<br>')}</div>`:''}
+    <div class="card" style="margin-top:14px">
+      <div class="field"><label>Предмет</label><div class="seg">${SUBJ_KEYS.map(k=>`<button class="s-${k} ${E.subject===k?'on':''}" data-a="edSubj" data-v="${k}"><span class="sdot" style="background:${SUBJ[k].color}"></span>${SUBJ[k].ru}</button>`).join('')}</div></div>
+      <div class="field"><label for="ed-title">Название</label><input id="ed-title" class="input" data-ed="title" value="${esc(E.title)}" placeholder="Напр.: Prozentrechnung - Teil 2" maxlength="120"></div>
+      <div class="row" style="align-items:flex-start">
+        <div class="field" style="flex:2;min-width:200px"><label for="ed-topic">Тема (для статистики прогресса)</label><input id="ed-topic" class="input" data-ed="topic" value="${esc(E.topic)}" placeholder="Напр.: Prozentrechnung" list="topiclist" maxlength="60">
+          <datalist id="topiclist">${[...new Set(quizList().filter(q=>q.subject===E.subject).map(q=>q.topic).filter(Boolean))].map(x=>`<option value="${esc(x)}">`).join('')}</datalist></div>
+        <div class="field" style="flex:1;min-width:150px"><label for="ed-due">Сдать до</label><input id="ed-due" type="date" class="input" data-ed="due" value="${esc(E.due||'')}"></div>
+      </div>
+      <div class="field"><label for="ed-desc">Описание (необязательно)</label><input id="ed-desc" class="input" data-ed="description" value="${esc(E.description)}" maxlength="200"></div>
+      <div class="field"><label>Кому назначить</label>
+        <div class="seg"><button class="plain ${t.all?'on':''}" data-a="edAll" data-v="1">Всем ученикам</button><button class="plain ${!t.all?'on':''}" data-a="edAll" data-v="0">Выбрать группы / учеников</button></div>
+        ${!t.all ? `<div style="margin-top:10px"><div class="hint">Группы</div><div class="checks" style="margin:6px 0 10px">${groups().length?groups().map(g=>`<button class="chip ${t.groups.includes(g)?'on':''}" data-a="edGroup" data-v="${esc(g)}">${esc(g)}</button>`).join(''):'<span class="hint">Групп пока нет - админ может создать их во вкладке «Люди и группы».</span>'}</div>
+          <div class="hint">Отдельные ученики</div><div class="checks" style="margin-top:6px">${students().map(u=>`<button class="chip ${t.students.includes(u)?'on':''}" data-a="edStudent" data-v="${u}">${esc(nameOf(u))}${groupOf(u)?` <span class="muted small">${esc(groupOf(u))}</span>`:''}</button>`).join('')||'<span class="hint">Учеников пока нет.</span>'}</div></div>`:''}
+      </div>
+    </div>
+    ${aiPanel(E)}
+    <div class="section-title"><h2>Вопросы</h2><span class="count">${E.questions.length}</span></div>
+    ${E.questions.map((it,i)=>`<div class="qedit"><div class="qh"><span class="qnum">${i+1}</span><span class="spacer"></span>
+        <button class="iconbtn" data-a="qUp" data-i="${i}" title="Выше" ${i===0?'disabled':''}>↑</button><button class="iconbtn" data-a="qDown" data-i="${i}" title="Ниже" ${i===E.questions.length-1?'disabled':''}>↓</button><button class="iconbtn" data-a="qDel" data-i="${i}" title="Удалить вопрос">✕</button></div>
+      <div class="field"><textarea class="input" data-eq="${i}" data-f="q" placeholder="Текст вопроса" rows="2">${esc(it.q)}</textarea></div>
+      <div class="hint" style="margin-bottom:6px">Варианты ответа - отметьте кружком правильный</div>
+      ${it.options.map((o,j)=>`<div class="optedit ${it.correct===j?'isright':''}"><input type="radio" name="c${i}" data-ec="${i}" data-j="${j}" ${it.correct===j?'checked':''} aria-label="Правильный ответ ${L[j]}"><b style="width:18px">${L[j]}</b><input class="input" data-eo="${i}" data-j="${j}" value="${esc(o)}" placeholder="Вариант ${L[j]}">${it.options.length>2?`<button class="iconbtn" data-a="optDel" data-i="${i}" data-j="${j}" title="Удалить вариант">−</button>`:''}</div>`).join('')}
+      ${it.options.length<6?`<button class="btn sm ghost" data-a="optAdd" data-i="${i}">＋ вариант</button>`:''}
+      <div class="field" style="margin-top:12px;margin-bottom:0"><label>Объяснение (видно ученику после ответа)</label><textarea class="input" data-eq="${i}" data-f="explanation" placeholder="Почему правильный ответ правильный, и где частая ошибка" rows="3">${esc(it.explanation)}</textarea></div>
+    </div>`).join('')}
+    <button class="btn ghost" data-a="qAdd" style="width:100%;justify-content:center">＋ Добавить вопрос</button>
+    <div class="sticky-actions">
+      ${E.id?`<button class="btn danger" data-a="delQuiz">Удалить квиз</button><span class="spacer"></span>`:''}
+      <button class="btn ghost" data-a="saveQuiz" data-pub="0">Сохранить черновик</button>
+      <button class="btn" data-a="saveQuiz" data-pub="1">${E.published&&E.id?'Сохранить':'Опубликовать'} ✓</button>
+    </div></div>`;
+}
+
+/* ---------- Admin ---------- */
+function allAttempts(){
+  const out = []; for(const [uid, doc] of Object.entries(S.attempts)) for(const [qid,a] of Object.entries(doc.byQuiz||{})) out.push({uid, qid, ...a}); return out;
+}
+function adminView(){
+  const st = students(); const teachers = Object.keys(S.profiles).filter(u=>roleOf(u)==='teacher');
+  const atts = allAttempts(); const pub = quizList().filter(q=>q.published);
+  const now = Date.now(); const week = atts.filter(a=>now-new Date(a.finishedAt)<7*86400000);
+  const activeUsers = new Set(week.map(a=>a.uid)).size;
+  // runs per day (history entries)
+  const runs = []; atts.forEach(a => (a.history?.length ? a.history : [{at:a.finishedAt, score:a.score}]).forEach(h=>runs.push(h)));
+  const days = []; for(let i=13;i>=0;i--){ const d = new Date(now - i*86400000); const key = d.toISOString().slice(0,10); days.push({key, label:d.toLocaleDateString('ru-RU',{day:'numeric'}), wd:d.toLocaleDateString('ru-RU',{weekday:'short'}), n:runs.filter(r=>(r.at||'').slice(0,10)===key).length}); }
+  const maxN = Math.max(1, ...days.map(d=>d.n));
+  const subjAvg = SUBJ_KEYS.map(k=>{ const xs = atts.filter(a=>a.subject===k); const c=xs.reduce((s,a)=>s+a.correct,0), t=xs.reduce((s,a)=>s+a.total,0); return {k, pct:t?Math.round(c/t*100):null, n:xs.length}; });
+  const events = [];
+  atts.forEach(a => events.push({at:a.finishedAt, ico:'✅', html:`<b>${esc(nameOf(a.uid))}</b> прошёл(а) «${esc(S.quizzes[a.qid]?.title||'удалённый квиз')}» - <b class="${scCls(a.score)}">${a.score}%</b>${(a.tries||1)>1?` <span class="muted">(попытка ${a.tries})</span>`:''}`, subj:S.quizzes[a.qid]?.subject}));
+  quizList().forEach(q => events.push({at:q.createdAt, ico:'📝', html:`<b>${esc(nameOf(q.authorId))}</b> создал(а) квиз «${esc(q.title)}»${q.published?'':' (черновик)'}`, subj:q.subject}));
+  Object.entries(S.profiles).forEach(([u,p]) => events.push({at:p.createdAt, ico:'👋', html:`<b>${esc(p.name)}</b> ${p.requested==='admin'?'создал(а) школу':`зарегистрировался(ась) как ${p.requested==='teacher'?'преподаватель':'ученик'}`}`}));
+  events.sort((a,b)=>(b.at||'').localeCompare(a.at||''));
+  const pending = Object.keys(S.profiles).filter(u=>roleOf(u)==='pending');
+  const allPct = (()=>{ const c=atts.reduce((s,a)=>s+a.correct,0), t=atts.reduce((s,a)=>s+a.total,0); return t?Math.round(c/t*100):null; })();
+  return `<h1>Обзор школы</h1><p class="muted">Всё, что происходит на сайте.</p>
+    ${pending.length?`<div class="note" style="margin-top:14px"><b>🔔 ${pending.length} ${plural(pending.length,'заявка','заявки','заявок')} преподавателя</b>${pending.map(u=>`<div class="req"><b>${esc(nameOf(u))}</b><span class="muted small">${fmtWhen(prof(u).createdAt)}</span><span class="spacer"></span><button class="btn sm" data-a="setRole" data-uid="${u}" data-v="teacher">Подтвердить</button><button class="btn sm ghost" data-a="setRole" data-uid="${u}" data-v="student">Сделать учеником</button></div>`).join('')}</div>`:''}
+    <div class="kpis6" style="margin-top:16px">
+      <div class="kpi"><div class="v">${st.length}</div><div class="l">учеников</div></div>
+      <div class="kpi"><div class="v">${teachers.length}</div><div class="l">преподавателей</div></div>
+      <div class="kpi"><div class="v">${pub.length}</div><div class="l">опубликовано квизов</div></div>
+      <div class="kpi"><div class="v">${runs.length}</div><div class="l">прохождений всего</div></div>
+      <div class="kpi"><div class="v ${scCls(allPct)}">${allPct==null?'-':allPct+'%'}</div><div class="l">средний балл</div></div>
+      <div class="kpi"><div class="v">${activeUsers}</div><div class="l">активны за 7 дней</div></div>
+    </div>
+    <div class="two" style="margin-top:14px">
+      <div class="card"><h3>Прохождения за 14 дней</h3><div class="days">${days.map(d=>`<div class="d"><span class="tip">${d.wd} ${d.label}: ${d.n}</span><i style="height:${d.n/maxN*100}%"></i><span>${d.label}</span></div>`).join('')}</div></div>
+      <div class="card"><h3>Средний балл по предметам</h3><div class="topics" style="margin-top:14px">${subjAvg.map(s=>`<div class="topic" style="grid-template-columns:110px 1fr 56px"><div class="tn"><span class="sdot" style="background:${SUBJ[s.k].color}"></span><span>${SUBJ[s.k].ru}</span></div><div class="bar"><i style="width:${s.pct||0}%;background:${SUBJ[s.k].color}"></i></div><div class="lvl" style="color:var(--ink)">${s.pct==null?'-':s.pct+'%'}</div></div>`).join('')}</div>
+        <p class="small muted" style="margin-top:14px">По ${atts.length} ${plural(atts.length,'результату','результатам','результатам')} (последняя попытка каждого ученика).</p></div>
+    </div>
+    <div class="section-title"><h2>Лента активности</h2></div>
+    <div class="card"><div class="feed">${events.slice(0,30).map(e=>`<div class="ev"><span class="ico" ${e.subj?`style="box-shadow:inset 3px 0 0 ${SUBJ[e.subj].color}"`:''}>${e.ico}</span><div style="flex:1">${e.html}<div class="t">${fmtWhen(e.at)}</div></div></div>`).join('')||'<div class="empty">Пока тихо.</div>'}</div></div>`;
+}
+/* ===================== Actions ===================== */
+function go(tab){ S.tab = tab; S.sub = null; S.play = null; S.editor = null; S.filter = 'all'; try{ history.replaceState(null,'','#'+tab); }catch(e){} render(); window.scrollTo(0,0); }
+function openSub(sub){ S.prevSub = S.sub; S.sub = sub; render(); window.scrollTo(0,0); }
+
+const A = {
+  tab: el => go(el.dataset.tab),
+  back: () => { if(S.sub?.name==='edit' && S.editor?.dirty && !S.editor.confirmLeave){ S.editor.confirmLeave = true; toast('Изменения не сохранены. Нажмите «Отмена» ещё раз, чтобы выйти.'); return; }
+    const p = S.prevSub; S.prevSub = null; S.sub = (p && p.name!=='play' && p.name!=='edit' && p!==S.sub) ? p : null; S.editor = null; S.play = null; render(); window.scrollTo(0,0); },
+  demoAs: el => { S.me = {id:el.dataset.id, isOwner:false}; S.tab=null; S.sub=null; S.play=null; S.editor=null; S.filter='all'; render(); },
+  filter: el => { S.filter = el.dataset.v; S._keepScroll=true; render(); },
+  gfilter: el => { S.groupFilter = el.dataset.v; S._keepScroll=true; render(); },
+  onlyMine: () => { S.onlyMine = !S.onlyMine; S._keepScroll=true; render(); },
+  authMode: el => { S.authMode = el.dataset.v; S.authErr = ''; S.authOk = ''; render(); },
+  logout: async () => { try{ await sb?.auth.signOut(); }catch(e){} S.mode='auth'; S.authMode='login'; S.authErr=''; S.authOk=''; S.me=null; S.tab=null; S.sub=null; S.profiles={}; S.quizzes={}; S.attempts={}; render(); },
+  copy: async el => { try{ await navigator.clipboard.writeText(el.dataset.v); toast('Скопировано ✓'); }catch(e){ toast('Не удалось скопировать - выделите и скопируйте вручную'); } },
+  regenTeacher: async () => { if(S._confirmRegen!=='t'){ S._confirmRegen='t'; toast('Нажмите ↻ ещё раз - старый код перестанет работать'); return; } S._confirmRegen=null; try{ await api.regenTeacher(); toast('Новый код создан'); render(); }catch(e){ writeErr(e); } },
+  regenGroup: async el => { if(S._confirmRegen!==el.dataset.v){ S._confirmRegen=el.dataset.v; toast('Нажмите ↻ ещё раз - старый код группы перестанет работать'); return; } S._confirmRegen=null; try{ await api.regenGroup(el.dataset.v); toast('Новый код создан'); render(); }catch(e){ writeErr(e); } },
+  resetPw: async el => { const uid = el.dataset.uid;
+    if(S._confirmPw!==uid){ S._confirmPw = uid; toast('Нажмите ещё раз, чтобы выдать '+nameOf(uid)+' новый пароль'); return; }
+    S._confirmPw = null; el.disabled = true;
+    try{ const pw = await api.resetPassword(uid); S.lastReset = {uid, pw}; S._keepScroll=false; render(); window.scrollTo(0,0); }
+    catch(e){ toast(e?.code==='forbidden'?'Нет прав сбросить этот пароль.':'Не удалось сбросить пароль.', true); el.disabled=false; } },
+  aiGen: async () => { const E = S.editor; const p = (E.aiPrompt||'').trim();
+    if(p.length < 5){ toast('Опишите, какие вопросы нужны', true); return; }
+    E.aiBusy = true; E.aiNote = ''; S._keepScroll = true; render();
+    try{
+      const qs = await api.generate({subject:E.subject, title:E.title, topic:E.topic, prompt:p, count:+(E.aiCount||8), level:E.aiLevel||'mittel', lang:E.aiLang||'ru'});
+      if(!qs?.length) throw {code:'ai_format'};
+      const blank = E.questions.every(it => !it.q.trim() && it.options.every(o=>!o.trim()));
+      E.questions = blank ? qs : E.questions.concat(qs);
+      E.dirty = true; E.aiNote = `✓ Добавлено вопросов: ${qs.length}. Проверьте их перед публикацией.`;
+    }catch(e){ const c = e?.code;
+      E.aiNote = c==='no_api_key' ? 'ИИ ещё не подключён: администратор должен добавить ключ Claude API в Supabase.'
+        : c==='limit' ? `Достигнут лимит: ${e.limit||40} генераций в сутки.` : c==='forbidden' ? 'Генерация доступна только преподавателям.'
+        : 'Не получилось сгенерировать. Попробуйте ещё раз или измените описание.'; }
+    E.aiBusy = false; S._keepScroll = true; render(); },
+  openQuiz: el => openSub({name:'intro', qid:el.dataset.id}),
+  review: el => { const qid = el.dataset.id; const q = S.quizzes[qid]; const a = att(S.me.id, qid);
+    S.play = {quiz:{id:qid, ...clone(q)}, finished:true, result:{...a}}; openSub({name:'play'}); },
+  reviewOf: el => { const qid = el.dataset.id, uid = el.dataset.uid; const q = S.quizzes[qid]; const a = att(uid,qid); if(!q||!a) return;
+    S.play = {quiz:{id:qid, ...clone(q)}, finished:true, result:{...a}, readonly:true}; openSub({name:'play'}); },
+  startQuiz: el => { const qid = el.dataset.id; const q = S.quizzes[qid]; if(!q) return;
+    S.play = {quiz:{id:qid, ...clone(q)}, i:0, answers:[], picked:null, revealed:false, startedAt:new Date().toISOString()}; S.sub = {name:'play'}; render(); window.scrollTo(0,0); },
+  pick: el => { const P = S.play; if(P.revealed) return; P.picked = +el.dataset.j; P.answers[P.i] = P.picked; P.revealed = true; S._keepScroll = true; render(); S._focus='#nextbtn'; const nb=document.getElementById('nextbtn'); nb&&nb.focus({preventScroll:true}); },
+  next: () => { const P = S.play; if(P.i+1 < P.quiz.questions.length){ P.i++; P.picked=null; P.revealed=false; render(); window.scrollTo(0,0); } else finishQuiz(); },
+  quitPlay: () => { const qid = S.play?.quiz?.id; S.play = null; S.sub = qid ? {name:'intro', qid} : null; render(); window.scrollTo(0,0); },
+  results: el => openSub({name:'results', qid:el.dataset.id}),
+  openStudent: el => openSub({name:'student', uid:el.dataset.uid}),
+  newQuiz: () => { S.editor = {id:null, title:'', subject: S.filter!=='all'?S.filter:'math', topic:'', description:'', due:'', targets:{all:true,groups:[],students:[]}, questions:[blankQ()], published:false}; openSub({name:'edit'}); },
+  editQuiz: el => { const q = S.quizzes[el.dataset.id]; S.editor = {id:el.dataset.id, ...clone(q), targets: {all:true,groups:[],students:[], ...(q.targets||{})}}; openSub({name:'edit'}); },
+  dupQuiz: el => { const q = S.quizzes[el.dataset.id]; S.editor = {id:null, ...clone(q), title: q.title+' (копия)', published:false, dirty:true}; delete S.editor.createdAt; openSub({name:'edit'}); },
+  edSubj: el => { S.editor.subject = el.dataset.v; S.editor.dirty=true; S._keepScroll=true; render(); },
+  edAll: el => { S.editor.targets.all = el.dataset.v==='1'; S.editor.dirty=true; S._keepScroll=true; render(); },
+  edGroup: el => { const t=S.editor.targets, v=el.dataset.v; t.groups = t.groups.includes(v)?t.groups.filter(x=>x!==v):[...t.groups,v]; S.editor.dirty=true; S._keepScroll=true; render(); },
+  edStudent: el => { const t=S.editor.targets, v=el.dataset.v; t.students = t.students.includes(v)?t.students.filter(x=>x!==v):[...t.students,v]; S.editor.dirty=true; S._keepScroll=true; render(); },
+  qAdd: () => { S.editor.questions.push(blankQ()); S.editor.dirty=true; S._keepScroll=true; render(); const tas=document.querySelectorAll('[data-f="q"]'); tas[tas.length-1]?.focus(); },
+  qDel: el => { const E=S.editor; if(E.questions.length<=1){ toast('Нужен хотя бы один вопрос'); return; } E.questions.splice(+el.dataset.i,1); E.dirty=true; S._keepScroll=true; render(); },
+  qUp: el => { const i=+el.dataset.i, Q=S.editor.questions; if(i>0){ [Q[i-1],Q[i]]=[Q[i],Q[i-1]]; S.editor.dirty=true; S._keepScroll=true; render(); } },
+  qDown: el => { const i=+el.dataset.i, Q=S.editor.questions; if(i<Q.length-1){ [Q[i+1],Q[i]]=[Q[i],Q[i+1]]; S.editor.dirty=true; S._keepScroll=true; render(); } },
+  optAdd: el => { S.editor.questions[+el.dataset.i].options.push(''); S.editor.dirty=true; S._keepScroll=true; render(); },
+  optDel: el => { const it = S.editor.questions[+el.dataset.i], j=+el.dataset.j; it.options.splice(j,1); if(it.correct===j) it.correct=0; else if(it.correct>j) it.correct--; S.editor.dirty=true; S._keepScroll=true; render(); },
+  saveQuiz: el => saveQuiz(el.dataset.pub==='1'),
+  delQuiz: async () => { const E=S.editor; if(!E.confirmDel){ E.confirmDel=true; toast('Нажмите «Удалить квиз» ещё раз для подтверждения.'); return; }
+    try{ await api.delQuiz(E.id); toast('Квиз удалён'); S.editor=null; S.sub=null; S.prevSub=null; render(); }catch(e){ writeErr(e); } },
+  setRole: async el => { const uid = el.dataset.uid; try{ await api.setRole(uid, el.dataset.v); toast('Готово'); render(); }catch(e){ writeErr(e); } },
+  addGroup: async () => { const inp = document.getElementById('newgroup'); const v = (inp.value||'').trim(); if(!v) return; if(groups().includes(v)){ toast('Такая группа уже есть'); return; }
+    try{ await api.addGroup(v); toast('Группа создана - код ниже'); render(); }catch(e){ writeErr(e); } },
+  delGroup: async el => { const v = el.dataset.v; if(S._confirmDel!==v){ S._confirmDel=v; toast('Нажмите ✕ ещё раз, чтобы удалить группу «'+v+'»'); return; } S._confirmDel=null; try{ await api.delGroup(v); render(); }catch(e){ writeErr(e); } },
+};
+
+async function finishQuiz(){
+  const P = S.play, q = P.quiz; const n = q.questions.length;
+  const answers = Array.from({length:n}, (_,i) => P.answers[i] ?? null);
+  const flags = q.questions.map((it,i)=>answers[i]===it.correct); const correct = flags.filter(Boolean).length;
+  P.finished = true; P.result = {answers, flags, correct, total:n, score:Math.round(correct/n*100)}; P.saving = true; render(); window.scrollTo(0,0);
+  try{ const rec = await api.submit(q.id, answers, P.startedAt); P.result = rec; P.saving = false; }
+  catch(e){ P.saving = false; P.saveFailed = true; writeErr(e); }
+  if(S.sub?.name==='play') { S._keepScroll=true; render(); }
+}
+async function saveQuiz(publish){
+  const E = S.editor; const errs = [];
+  if(!E.title.trim()) errs.push('Добавьте название.');
+  E.questions.forEach((it,i)=>{ const n=i+1;
+    if(!it.q.trim()) errs.push(`Вопрос ${n}: нет текста.`);
+    const filled = it.options.filter(o=>o.trim()).length; if(filled<2) errs.push(`Вопрос ${n}: нужно минимум 2 варианта.`);
+    if(!(it.options[it.correct]||'').trim()) errs.push(`Вопрос ${n}: правильный вариант пустой.`); });
+  if(publish && !E.targets.all && !E.targets.groups.length && !E.targets.students.length) errs.push('Выберите, кому назначить квиз.');
+  E.errors = errs; if(errs.length){ render(); window.scrollTo(0,0); return; }
+  // drop empty options, keep correct index aligned
+  const questions = E.questions.map(it => { const keep = it.options.map((o,j)=>({o:o.trim(),j})).filter(x=>x.o);
+    return {q:it.q.trim(), options:keep.map(x=>x.o), correct: keep.findIndex(x=>x.j===it.correct), explanation:(it.explanation||'').trim()}; });
+  const now = new Date().toISOString(); const old = E.id ? S.quizzes[E.id] : null;
+  const doc = {title:E.title.trim(), subject:E.subject, topic:(E.topic||'').trim(), description:(E.description||'').trim(), due:E.due||'',
+    targets:{all:!!E.targets.all, groups:E.targets.groups, students:E.targets.students}, questions, published: !!publish || (publish===false && false),
+    authorId: old?.authorId || S.me.id, createdAt: old?.createdAt || now, updatedAt: now};
+  doc.published = !!publish;
+  try{ await api.saveQuiz(E.id, doc); toast(publish ? 'Квиз опубликован ✓' : 'Черновик сохранён'); S.editor = null; S.sub = null; S.prevSub = null; S.tab='teach'; render(); window.scrollTo(0,0); }
+  catch(e){ writeErr(e); }
+}
+
+/* ===================== Events ===================== */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]'); if(!el || el.disabled) return;
+  if(el.tagName==='A') e.preventDefault();
+  const fn = A[el.dataset.a]; if(fn) fn(el, e);
+});
+document.addEventListener('submit', e => { const f = e.target.closest('[data-submit]'); if(!f) return; e.preventDefault();
+  document.querySelectorAll('[data-af]').forEach(i => { S.authForm[i.dataset.af] = i.value; }); authSubmit(f.dataset.submit); });
+async function authSubmit(mode){
+  const f = S.authForm; const email = (f.email||'').trim(), pw = f.password||'';
+  S.authErr = ''; S.authOk = '';
+  const fail = msg => { S.busy = false; S.authErr = msg; render(); };
+  if(mode!=='reset' && !/^\S+@\S+\.\S+$/.test(email)) return fail('Проверь, правильно ли написан e-mail.');
+  S.busy = true; render();
+  try{
+    if(mode==='login'){
+      if(!pw) return fail('Введи пароль.');
+      const { data, error } = await sb.auth.signInWithPassword({email, password:pw});
+      if(error) return fail(trAuth(error.message));
+      S.busy = false; f.password = ''; await onSignedIn(data.session); return;
+    }
+    if(mode==='signup'){
+      const name = (f.name||'').trim(); const code = (f.code||'').trim().toUpperCase();
+      if(name.length < 2) return fail('Напиши имя и фамилию.');
+      if(pw.length < 8) return fail('Пароль - минимум 8 символов.');
+      const chk = await sb.rpc('check_code', {p_code:code});
+      if(!chk.data) { S.codeStatus = 'bad'; return fail('Код школы не подошёл. Проверь его у преподавателя.'); }
+      const { data, error } = await sb.auth.signUp({email, password:pw, options:{data:{name, code}, emailRedirectTo: location.origin + location.pathname}});
+      if(error) return fail(trAuth(error.message));
+      if(data.user && Array.isArray(data.user.identities) && data.user.identities.length===0) return fail('Этот e-mail уже зарегистрирован. Попробуй войти.');
+      S.busy = false; f.password = '';
+      if(data.session){ await onSignedIn(data.session); return; }
+      S.authMode = 'login'; S.authOk = `Почти готово! Мы отправили письмо на ${email}. Открой его и нажми ссылку, потом войди здесь.`; render(); return;
+    }
+    if(mode==='forgot'){
+      const { error } = await sb.auth.resetPasswordForEmail(email, {redirectTo: location.origin + location.pathname});
+      if(error) return fail(trAuth(error.message));
+      S.busy = false; S.authMode = 'login'; S.authOk = `Если такой аккаунт есть, письмо со ссылкой уже летит на ${email}.`; render(); return;
+    }
+    if(mode==='reset'){
+      if(pw.length < 8) return fail('Пароль - минимум 8 символов.');
+      const { error } = await sb.auth.updateUser({password:pw});
+      if(error) return fail(trAuth(error.message));
+      S.busy = false; S.recovery = false; f.password = ''; toast('Пароль сохранён ✓');
+      const { data } = await sb.auth.getSession(); if(data.session) await onSignedIn(data.session); else { S.authMode='login'; render(); } return;
+    }
+  }catch(e){ console.warn(e); fail(trAuth(e?.message||'network')); }
+}
+document.addEventListener('input', e => {
+  const t = e.target, d = t.dataset;
+  if(d.af){ S.authForm[d.af] = t.value; if(d.af==='code') S.codeStatus=null; return; }
+  const E = S.editor; if(!E) return;
+  if(d.ed){ E[d.ed] = t.value; E.dirty=true; }
+  else if(d.eq!=null && d.f){ E.questions[+d.eq][d.f] = t.value; E.dirty=true; }
+  else if(d.eo!=null){ E.questions[+d.eo].options[+d.j] = t.value; E.dirty=true; }
+});
+document.addEventListener('change', async e => {
+  const t = e.target, d = t.dataset;
+  if(d.af==='code' && t.value.trim().length>=4 && sb){ try{ const r = await sb.rpc('check_code',{p_code:t.value}); S.codeStatus = r.data || 'bad'; S._keepScroll=true; render(); }catch(e){} return; }
+  if(d.ec!=null && S.editor){ S.editor.questions[+d.ec].correct = +d.j; S.editor.dirty=true; S._keepScroll=true; render(); return; }
+  if(d.role){ try{ await api.setRole(d.role, t.value); toast('Роль обновлена'); }catch(err){ writeErr(err); } t.blur(); render(); }
+  if(d.group!=null && d.group!==''){ try{ await api.setGroup(d.group, t.value); toast('Группа обновлена'); }catch(err){ writeErr(err); } t.blur(); render(); }
+});
+document.addEventListener('keydown', e => {
+  if(S.sub?.name!=='play' || !S.play || S.play.finished) return;
+  if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
+  const P = S.play; const k = e.key.toUpperCase();
+  if(!P.revealed){ const j = 'ABCDEF'.indexOf(k); const j2 = '123456'.indexOf(e.key); const idx = j>=0?j:j2; if(idx>=0 && idx<P.quiz.questions[P.i].options.length){ A.pick({dataset:{j:idx}}); e.preventDefault(); } }
+  else if(e.key==='Enter'){ A.next(); e.preventDefault(); }
+});
+
+/* ===================== Boot ===================== */
+function initTab(){ const h = (location.hash||'').slice(1); if(h && /^[a-z]+$/.test(h)) S.tab = h; }
+function showLoading(text='Загружаем…'){ $app.innerHTML = `<div class="loading"><div><div class="bob">${mascot('#ddb049',120)}</div><p>${text}</p></div></div>`; }
+async function onSignedIn(session){
+  S.me = {id:session.user.id, email:session.user.email, isOwner:false};
+  S.mode = 'loading'; showLoading();
+  try{ await api.load(); }catch(e){ console.warn(e); S.loadError = true; }
+  S.mode = 'live'; S.tab = null; S.sub = null; initTab(); render();
+}
+async function refresh(){
+  if(S.mode!=='live' || S.isDemo) return;
+  if(S.sub && ['edit','play'].includes(S.sub.name)) return;
+  try{ await api.load(); softRender(); }catch(e){ console.warn('refresh', e); }
+}
+async function boot(){
+  document.getElementById('bootmasc').innerHTML = mascot('#ddb049',120);
+  const params = new URLSearchParams(location.search);
+  if(params.has('demo') || !window.supabase){
+    api = demoApi; S.isDemo = true;
+    const store = {profiles:{}, roles:{}, quizzes:{}, attempts:{}, config:{}}; seedDemo(store);
+    S.profiles = store.profiles; S.roles = store.roles; S.quizzes = store.quizzes; S.attempts = store.attempts;
+    S.groupObjs = store.config.school.groups.map(n=>({id:n, name:n, code:mkCode(n)})); S.config = {groups:S.groupObjs.map(g=>g.name)};
+    S.settings = {teacher_code:'T-'+mkCode('')};
+    S.me = {id: params.get('as') || 'u-anya', isOwner:false};
+    S.mode = 'live'; initTab(); render(); return;
+  }
+  api = sbApi;
+  S.recovery = /type=recovery/.test(location.hash);
+  sb = window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true, flowType:'implicit'}});
+  sb.auth.onAuthStateChange((ev) => {
+    if(ev==='PASSWORD_RECOVERY'){ S.recovery = true; S.mode = 'auth'; S.authMode = 'reset'; S.authErr = S.authOk = ''; render(); }
+  });
+  let session = null;
+  try{ session = (await sb.auth.getSession()).data.session; }catch(e){ console.warn(e); }
+  if(/access_token|type=/.test(location.hash)) try{ history.replaceState(null,'',location.pathname); }catch(e){}
+  if(S.recovery){ S.mode = 'auth'; S.authMode = 'reset'; render(); return; }
+  if(session) await onSignedIn(session); else { S.mode = 'auth'; render(); }
+  setInterval(refresh, 60000);
+  document.addEventListener('visibilitychange', () => { if(document.visibilityState==='visible' && Date.now()-(S.loadedAt||0) > 20000) refresh(); });
+}
+window.addEventListener('hashchange', ()=>{ const h=location.hash.slice(1); if(S.mode==='live' && h && h!==S.tab && tabsFor(myRole()).some(t=>t[0]===h)) go(h); });
+boot();
+</script>
+</body>
+</html>
